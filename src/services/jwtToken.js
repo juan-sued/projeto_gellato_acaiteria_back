@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const SECRET = process.env.SECRET_KEY || '$1AIKSO%6A41';
-const EXPIRED_TIME = process.env.TOKEN_EXP_TIME || '5h';
+const EXPIRED_TIME = process.env.TOKEN_EXP_TIME || '24h';
 
 const createToken = payload => {
   return jwt.sign(payload, SECRET, { expiresIn: EXPIRED_TIME });

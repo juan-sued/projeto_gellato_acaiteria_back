@@ -17,7 +17,7 @@ model users {
   email    String @unique @db.VarChar(100)
   phone    String @db.VarChar(12)
   cpf      String @unique @db.VarChar(11)
-  password String @db.VarChar(244)
+  password String @db.Text()
 
   adresses   adresses[]
   favoriteds favoriteds[]

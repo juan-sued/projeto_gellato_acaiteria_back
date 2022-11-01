@@ -6,16 +6,14 @@ function getUserByEmail(email) {
   });
 }
 
-function insertUser({ name, email, password, phone = '123456789', cpf = '12345678910' }) {
-  console.log(name, email, phone, cpf, password);
-
+function insertUser({ name, email, encryptedPassword, phone = 'null', cpf = 'null' }) {
   return prisma.users.create({
     data: {
       name,
       email,
       phone,
       cpf,
-      password
+      password: encryptedPassword
     }
   });
 }
