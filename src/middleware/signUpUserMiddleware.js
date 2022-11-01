@@ -2,7 +2,7 @@ import * as controllerHelper from '../controllers/controllerHelper.js';
 
 import * as signRepository from '../repositories/usersRepository.js';
 
-import * as validateSchemaHelper from '../middleware/validateSchemaHelper.js';
+import * as validateSchemaHelper from './utils/validateSchemaHelper.js';
 import signUpSchema from '../schemas/signUpSchema.js';
 
 async function signUpMiddleware(request, response, next) {
