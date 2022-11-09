@@ -13,7 +13,7 @@ const { password, confirmPassword } = newUser;
   
   if (confirmPassword !== password) throw errorFactory.conflict("The passwords don't match.");
   newUser.password = await bcrypt.hash(password, 10);
- 
+ "a"
   await usersRepository.insertUser(newUser);
  
 }
