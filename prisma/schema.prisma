@@ -12,12 +12,13 @@ datasource db {
 
 //=====================  users =====================//
 model users {
-  id       Int     @id @default(autoincrement())
-  name     String  @db.VarChar(150)
-  email    String  @unique @db.VarChar(100)
-  phone    String? @db.VarChar(12)
-  cpf      String? @unique @db.VarChar(11)
-  password String  @db.Text()
+  id              Int     @id @default(autoincrement())
+  name            String  @db.VarChar(150)
+  email           String  @unique @db.VarChar(100)
+  phone           String? @db.VarChar(12)
+  cpf             String? @unique @db.VarChar(11)
+  password        String  @db.Text()
+  isAdministrator Boolean @default(false) @db.Boolean()
 
   adresses   adresses[]
   favoriteds favoriteds[]
@@ -26,10 +27,10 @@ model users {
 }
 
 model feedbacks {
-  id       Int    @id @default(autoincrement())
-  userId   Int    @db.SmallInt()
-  feedback String @db.Text()
-  starts   String @db.VarChar(3)
+  id       Int     @id @default(autoincrement())
+  userId   Int     @db.SmallInt()
+  feedback String? @db.Text()
+  stars    String  @db.VarChar(3)
 
   user users @relation(fields: [userId], references: [id])
 }
@@ -37,23 +38,26 @@ model feedbacks {
 //=====================  products =====================//
 
 model products {
-  id          Int          @id @default(autoincrement())
-  title       String       @unique @db.VarChar(150)
-  image       String       @db.VarChar(100)
-  price       Int          @db.SmallInt()
-  description String       @db.VarChar(70)
-  categoryId  Int          @db.SmallInt()
-  favoriteds  favoriteds[]
-  category    categories   @relation(fields: [categoryId], references: [id])
-  orders      orders[]
-  stock       stock[]
-  historic    historic[]
+  id             Int          @id @default(autoincrement())
+  title          String       @unique @db.VarChar(150)
+  image          String       @db.VarChar(100)
+  price          Int          @db.SmallInt()
+  description    String       @db.VarChar(70)
+  categoryId     Int          @db.SmallInt()
+  quantityPerCup Decimal      @db.Decimal()
+  isOfertOfDay   Boolean      @default(false) @db.Boolean()
+  favoriteds     favoriteds[]
+  category       categories   @relation(fields: [categoryId], references: [id])
+  orders         orders[]
+  stock          stock[]
+  historic       historic[]
 }
 
 model categories {
-  id       Int        @id @default(autoincrement())
-  category String     @unique @db.VarChar(100)
-  products products[]
+  id          Int        @id @default(autoincrement())
+  category    String     @unique @db.VarChar(50)
+  description String     @unique @db.VarChar(100)
+  products    products[]
 }
 
 model favoriteds {
@@ -65,13 +69,13 @@ model favoriteds {
 }
 
 model orders {
-  id          Int      @id @default(autoincrement())
-  userId      Int      @db.SmallInt()
-  productId   Int      @db.SmallInt()
-  createdAt   DateTime @db.Timestamp()
-  isDelivered DateTime @db.Date()
-  user        users    @relation(fields: [userId], references: [id])
-  product     products @relation(fields: [productId], references: [id])
+  id          Int       @id @default(autoincrement())
+  userId      Int       @db.SmallInt()
+  productId   Int       @db.SmallInt()
+  createdAt   DateTime  @db.Timestamp()
+  isDelivered DateTime? @db.Timestamp()
+  user        users     @relation(fields: [userId], references: [id])
+  product     products  @relation(fields: [productId], references: [id])
 }
 
 //=====================  adresses =====================//
@@ -113,12 +117,12 @@ model cities {
 //=====================  administrator =====================//
 
 model stock {
-  id          Int      @id @default(autoincrement())
-  productId   Int      @db.SmallInt()
-  availables  Int      @db.SmallInt()
-  isDelivered DateTime @db.Date()
-  notes       String   @db.Text()
-  product     products @relation(fields: [productId], references: [id])
+  id           Int      @id @default(autoincrement())
+  productId    Int      @db.SmallInt()
+  quantity     Int      @db.Integer()
+  purchaseDate DateTime @db.Date()
+  notes        String   @db.Text()
+  product      products @relation(fields: [productId], references: [id])
 }
 
 model historic {
@@ -126,7 +130,6 @@ model historic {
   productId    Int      @db.SmallInt()
   salesCounter Int      @db.Integer()
   dataSold     DateTime @db.Date()
-  notes        String   @db.Text()
   productValue Int      @db.SmallInt()
   product      products @relation(fields: [productId], references: [id])
 }
