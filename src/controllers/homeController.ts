@@ -1,5 +1,5 @@
 
-import { getFavoritedByIdService } from '../services/favoritedsServices/getFavoritedsService.js';
+import { getFavoritedByIdService } from '../services/favoritedsServices/getFavoritedsService';
 
 
 import { Request, Response } from 'express';

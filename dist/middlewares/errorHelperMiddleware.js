@@ -1,4 +1,7 @@
-export function errorHandlerMiddleware(error, _req, res, _next) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.errorHandlerMiddleware = void 0;
+function errorHandlerMiddleware(error, _req, res, _next) {
     switch (error.type) {
         case "error_unprocessable_entity":
             return res.status(422).send({ message: error.message });
@@ -14,3 +17,5 @@ export function errorHandlerMiddleware(error, _req, res, _next) {
             res.sendStatus(500);
     }
 }
+exports.errorHandlerMiddleware = errorHandlerMiddleware;
+//# sourceMappingURL=errorHelperMiddleware.js.map

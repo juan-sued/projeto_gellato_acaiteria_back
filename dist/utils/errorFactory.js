@@ -1,30 +1,39 @@
-export function notFound(entity) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.forbidden = exports.unprocessableEntity = exports.unauthorized = exports.conflict = exports.notFound = void 0;
+function notFound(entity) {
     return {
         type: "error_not_found",
-        message: "".concat(entity, " was not found.")
+        message: `${entity} was not found.`,
     };
 }
-export function conflict(message) {
+exports.notFound = notFound;
+function conflict(message) {
     return {
         type: "error_conflict",
-        message: message
+        message,
     };
 }
-export function unauthorized(entity) {
+exports.conflict = conflict;
+function unauthorized(entity) {
     return {
         type: "error_unauthorized",
-        message: "There is no ".concat(entity, " in the request.")
+        message: `There is no ${entity} in the request.`,
     };
 }
-export function unprocessableEntity(messages) {
+exports.unauthorized = unauthorized;
+function unprocessableEntity(messages) {
     return {
         type: "error_unprocessable_entity",
-        message: messages
+        message: messages,
     };
 }
-export function forbidden() {
+exports.unprocessableEntity = unprocessableEntity;
+function forbidden() {
     return {
         type: "error_forbidden",
-        message: "Email or password are invalid."
+        message: "Email or password are invalid.",
     };
 }
+exports.forbidden = forbidden;
+//# sourceMappingURL=errorFactory.js.map

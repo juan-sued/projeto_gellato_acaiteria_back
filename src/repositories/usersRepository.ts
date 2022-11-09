@@ -1,5 +1,5 @@
-import { prisma } from '../databases/postgreSQL.js';
-import { ISign } from '../interfaces/authInterfaces.js';
+import { prisma } from '../databases/postgreSQL';
+import { ISign } from '../interfaces/authInterfaces';
 
 //=================== GET =====================//
 function getUserByEmail(email: string) {

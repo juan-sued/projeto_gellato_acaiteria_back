@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
 
 import { Request, Response, NextFunction } from 'express';
-import * as usersRepository from '../repositories/usersRepository.js';
+import * as usersRepository from '../repositories/usersRepository';
 
-import { errorFactory } from '../utils/index.js';
-import { decodedToken } from '../services/authServices/jwtToken.js';
+import { errorFactory } from '../utils/index';
+import { decodedToken } from '../services/authServices/jwtToken';
 
 dotenv.config();
 

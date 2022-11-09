@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
-import { ISign } from '../interfaces/authInterfaces.js';
+import { ISign } from '../interfaces/authInterfaces';
 
-import signInService from '../services/authServices/signInService.js';
-import { signUpService } from '../services/authServices/signUpService.js';
+import signInService from '../services/authServices/signInService';
+import { signUpService } from '../services/authServices/signUpService';
 
 export async function registerUserController(request :Request, response:Response) {
+
   const newUser: ISign = request.body;
+
     await signUpService(newUser)   
+   
     response.sendStatus(201)
   }
 

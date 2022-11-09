@@ -1,4 +1,4 @@
-import { prisma } from '../databases/postgreSQL.js';
+import { prisma } from '../databases/postgreSQL';
 
 //=================== GET =====================//
 function getHomeContent() {

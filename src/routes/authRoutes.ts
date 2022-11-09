@@ -2,12 +2,10 @@ import { Router } from 'express';
 import {
   loginUserController,
   registerUserController
-} from '../controllers/usersController.js';
+} from '../controllers/usersController';
 
-
-import { validateSchemaMiddleware } from '../middlewares/validateSchemaMiddleware.js';
-import { authSchemas } from '../schemas/index.js';
-
+import { validateSchemaMiddleware } from '../middlewares/validateSchemaMiddleware';
+import { authSchemas } from '../schemas/index';
 
 export const authRouter = Router();
 

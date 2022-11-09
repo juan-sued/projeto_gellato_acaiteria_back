@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { authRouter } from "./authRoutes.js";
-import { favoritedsRouter } from "./favoritedsRoutes.js";
-import { homeContentRouter } from "./homeRoutes.js";
+import { authRouter } from "./authRoutes";
+import { favoritedsRouter } from "./favoritedsRoutes";
+import { homeContentRouter } from "./homeRoutes";
+
 const router = Router();
 
 router.use([authRouter, favoritedsRouter, homeContentRouter]);

@@ -1,6 +1,9 @@
-import { prisma } from '../databases/postgreSQL.js';
-//=================== GET =====================//
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getHomeContent = void 0;
+const postgreSQL_1 = require("../databases/postgreSQL");
 function getHomeContent() {
-    return prisma.users.findFirst();
+    return postgreSQL_1.prisma.users.findFirst();
 }
-export { getHomeContent };
+exports.getHomeContent = getHomeContent;
+//# sourceMappingURL=homeRepository.js.map
