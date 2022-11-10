@@ -1,8 +1,11 @@
-import { prisma } from '../databases/postgreSQL.js';
-//=================== GET =====================//
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getFavoritedsById = void 0;
+const postgreSQL_1 = require("../databases/postgreSQL");
 function getFavoritedsById(id) {
-    return prisma.favoriteds.findMany({
+    return postgreSQL_1.prisma.favoriteds.findMany({
         where: { userId: id }
     });
 }
-export { getFavoritedsById };
+exports.getFavoritedsById = getFavoritedsById;
+//# sourceMappingURL=favoritedsRepository.js.map

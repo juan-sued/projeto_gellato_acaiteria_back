@@ -1,12 +1,17 @@
-import { errorFactory } from "../utils";
-export var validateSchemaMiddleware = function (schema) {
-    return function (request, response, next) {
-        var body = request.body;
-        var error = schema.validate(body, { abortEarly: false }).error;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateSchemaMiddleware = void 0;
+const utils_1 = require("../utils");
+const validateSchemaMiddleware = (schema) => {
+    return (request, response, next) => {
+        const body = request.body;
+        const { error } = schema.validate(body, { abortEarly: false });
         if (error !== undefined) {
-            var messages = error === null || error === void 0 ? void 0 : error.details.map(function (detail) { return detail.message; });
-            throw errorFactory.unprocessableEntity(messages);
+            const messages = error?.details.map((detail) => detail.message);
+            throw utils_1.errorFactory.unprocessableEntity(messages);
         }
         next();
     };
 };
+exports.validateSchemaMiddleware = validateSchemaMiddleware;
+//# sourceMappingURL=validateSchemaMiddleware.js.map

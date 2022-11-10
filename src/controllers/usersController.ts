@@ -1,18 +1,16 @@
 import { Request, Response } from 'express';
-import { ISign } from '../interfaces/authInterfaces.js';
+import {
+  getAllUsersService,
+  getUsersByFilterNameService
+} from '../services/usersService';
+import { users } from '@prisma/client';
+export async function getUsersController(request: Request, response: Response) {
+  const { name } = request.query;
 
-import signInService from '../services/authServices/signInService.js';
-import { signUpService } from '../services/authServices/signUpService.js';
+  let users: users[] = [];
 
-export async function registerUserController(request :Request, response:Response) {
-  const newUser: ISign = request.body;
-    await signUpService(newUser)   
-    response.sendStatus(201)
-  }
+  if (typeof name === 'string') users = await getUsersByFilterNameService(name);
+  else users = await getAllUsersService();
 
-export async function loginUserController(request: Request, response: Response) {
-  const user: ISign = request.body;
-  const token: string = await signInService(user);
-  response.status(200).send(token);
-
+  response.status(200).send(users);
 }
