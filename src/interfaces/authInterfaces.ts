@@ -1,5 +1,5 @@
-import { users } from "@prisma/client";
+import { users } from '@prisma/client';
 
-export interface ISign extends Omit<users, "id" | "phone"| "cpf" |"isAdministrator"> {
+export interface ISign extends Omit<users, 'id' | 'phone' | 'cpf'> {
   confirmPassword?: string;
 }
