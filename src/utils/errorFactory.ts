@@ -6,7 +6,6 @@ export function notFound(entity: string) {
 }
 
 export function conflict(message: string) {
-  console.log('aqui')
   return {
     type: "error_conflict",
     message,

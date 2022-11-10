@@ -7,7 +7,7 @@ const validateSchemaMiddleware = (schema) => {
         const body = request.body;
         const { error } = schema.validate(body, { abortEarly: false });
         if (error !== undefined) {
-            const messages = error === null || error === void 0 ? void 0 : error.details.map((detail) => detail.message);
+            const messages = error?.details.map((detail) => detail.message);
             throw utils_1.errorFactory.unprocessableEntity(messages);
         }
         next();

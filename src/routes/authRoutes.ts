@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
   loginUserController,
   registerUserController
-} from '../controllers/usersController';
+} from '../controllers/authController';
 
 import { validateSchemaMiddleware } from '../middlewares/validateSchemaMiddleware';
 import { authSchemas } from '../schemas/index';

@@ -1,3 +1,4 @@
+import { users } from '@prisma/client';
 import { prisma } from '../databases/postgreSQL';
 import { ISign } from '../interfaces/authInterfaces';
 
@@ -13,15 +14,29 @@ function getUserById(id: number) {
   });
 }
 
+function getAllUsers(): Promise<users[]> {
+  return prisma.users.findMany();
+}
+
+function getUsersByFilterName(name: string): Promise<users[]> {
+  return prisma.users.findMany({
+    where: {
+      name: {
+        startsWith: `${name}`,
+        mode: 'insensitive'
+      }
+    }
+  });
+}
+
 //================= INSERT ===================//
 
- async function insertUser( newUser: ISign ) {
-  delete newUser.confirmPassword
+async function insertUser(newUser: ISign) {
+  delete newUser.confirmPassword;
 
   const result = await prisma.users.create({ data: newUser });
 
-  if (!result) throw { type: "error" };
-  
+  if (!result) throw { type: 'error' };
 }
 
-export { getUserByEmail, insertUser, getUserById };
+export { getUserByEmail, insertUser, getUserById, getAllUsers, getUsersByFilterName };

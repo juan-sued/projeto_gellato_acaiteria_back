@@ -8,22 +8,25 @@ import { decodedToken } from '../services/authServices/jwtToken';
 
 dotenv.config();
 
-async function validateJwtTokenMiddleware(request: Request, response: Response, next: NextFunction) {
-  
-  const token: string | undefined  = request.header('Authorization')?.replace('Bearer ', '');
+async function validateJwtTokenMiddleware(
+  request: Request,
+  response: Response,
+  next: NextFunction
+) {
+  const token: string | undefined = request
+    .header('Authorization')
+    ?.replace('Bearer ', '');
 
+  if (!token) throw errorFactory.unauthorized('token');
 
-    if(!token) throw errorFactory.unauthorized("token");
-    
-    const decoded = decodedToken(token)
- 
-    const user = await usersRepository.getUserById(decoded.id);
+  const payload = await decodedToken(token);
 
-    if (!user)throw errorFactory.unauthorized("usuário inexistente");
+  const user = await usersRepository.getUserById(payload.id);
 
-    response.locals.idUser = decoded.id;
-    
-    next();
+  if (!user) throw errorFactory.notFound('usuário inexistente');
 
+  response.locals.idUser = payload.id;
+
+  next();
 }
 export default validateJwtTokenMiddleware;

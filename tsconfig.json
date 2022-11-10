@@ -11,7 +11,13 @@
     "strict": true,
     "skipLibCheck": true,
     "checkJs": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "joi": [
+        "node_modules/joi/dist/joi-browser.min"
+      ]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
