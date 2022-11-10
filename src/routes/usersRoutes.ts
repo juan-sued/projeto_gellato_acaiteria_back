@@ -5,5 +5,6 @@ import validateJwtTokenMiddleware from '../middlewares/validateJwtTokenMiddlewar
 const usersRouter = Router();
 
 usersRouter.get('/users', validateJwtTokenMiddleware, getUsersController);
+usersRouter.get('/users/:id', validateJwtTokenMiddleware, getUsersController);
 
 export { usersRouter };

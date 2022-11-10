@@ -1,6 +1,7 @@
+import { Select } from '@mui/material';
 import { prisma } from '../databases/postgreSQL';
 import { ISign } from '../interfaces/authInterfaces';
-import { Users } from '../interfaces/userInterfaces ';
+import { Address, Users } from '../interfaces/userInterfaces ';
 
 //=================== GET =====================//
 function getUserByEmail(email: string) {
@@ -8,9 +9,32 @@ function getUserByEmail(email: string) {
     where: { email }
   });
 }
+
 function getUserById(id: number) {
-  return prisma.users.findFirst({
-    where: { id }
+  return prisma.users.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      cpf: true
+    }
+  });
+}
+
+function getAddressesByUser(id: number): Promise<Address[]> {
+  return prisma.adresses.findMany({
+    where: { userId: id },
+    select: {
+      cep: true,
+      street: true,
+      number: true,
+      complement: true,
+      id: true,
+      typeCep: true,
+      neighborhood: true
+    }
   });
 }
 
@@ -100,5 +124,6 @@ export {
   getAllUsers,
   getUsersByFilterName,
   getAllAdministrators,
-  getAdministratorsByFilterName
+  getAdministratorsByFilterName,
+  getAddressesByUser
 };
