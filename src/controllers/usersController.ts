@@ -1,16 +1,19 @@
 import { Request, Response } from 'express';
-import {
-  getAllUsersService,
-  getUsersByFilterNameService
-} from '../services/usersService';
-import { users } from '@prisma/client';
+import { getUsersService, updateUserService } from '../services/usersService';
+
 export async function getUsersController(request: Request, response: Response) {
   const { name } = request.query;
+  const { id } = request.params;
 
-  let users: users[] = [];
-
-  if (typeof name === 'string') users = await getUsersByFilterNameService(name);
-  else users = await getAllUsersService();
-
+  const users = await getUsersService(name, id);
   response.status(200).send(users);
+}
+
+export async function updateUserController(request: Request, response: Response) {
+  const { idUser } = response.locals;
+  const updateUserData = request.body;
+
+  await updateUserService(idUser, updateUserData);
+
+  response.sendStatus(200);
 }
