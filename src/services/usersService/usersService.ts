@@ -77,4 +77,9 @@ async function updateUserService(id: string, updateUserData: UpdateUserData) {
   return;
 }
 
-export { getUsersService, updateUserService };
+async function deleteUserService(id: string) {
+  if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
+  await usersRepository.deleteUser(Number(id));
+}
+
+export { getUsersService, updateUserService, deleteUserService };

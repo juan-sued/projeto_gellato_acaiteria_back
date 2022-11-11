@@ -200,6 +200,10 @@ async function insertNeighborhoods(neighborhood: string | undefined) {
     });
 }
 
+async function deleteUser(id: number) {
+  await prisma.users.delete({ where: { id: id } });
+}
+
 export {
   getUserByEmail,
   insertUser,
@@ -210,5 +214,6 @@ export {
   getAdministratorsByFilterName,
   getAddressesByUser,
   updateUser,
-  updateAddress
+  updateAddress,
+  deleteUser
 };
