@@ -2,10 +2,12 @@ import {
   Address,
   responseDataUser,
   ResponseUsers,
+  UpdateUserData,
   Users
 } from '../../interfaces/userInterfaces ';
 import { usersRepository } from '../../repositories';
 import { errorFactory } from '../../utils';
+import bcrypt from 'bcrypt';
 
 async function getUsersService(
   name: string | any,
@@ -29,7 +31,7 @@ async function getUsersService(
   if (name) {
     const allUsers = await usersRepository.getUsersByFilterName(name);
     const allAdministrators = await usersRepository.getAdministratorsByFilterName(name);
-    console.log(allUsers);
+
     if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
 
     usersListResponse.users = allUsers;
@@ -56,4 +58,23 @@ async function getUsersService(
   return usersListResponse;
 }
 
-export { getUsersService };
+async function updateUserService(id: string, updateUserData: UpdateUserData) {
+  if (!updateUserData.email || !updateUserData.password || !id)
+    throw errorFactory.unprocessableEntity([
+      'email inexistent or',
+      'id inexistent or',
+      'password inexistent'
+    ]);
+
+  const user = await usersRepository.getUserByEmail(updateUserData.email);
+  if (user) throw errorFactory.conflict('user existent');
+
+  const passwordCripted = await bcrypt.hash(updateUserData.password, 10);
+  updateUserData.password = passwordCripted;
+
+  await usersRepository.updateUser(Number(id), updateUserData);
+
+  return;
+}
+
+export { getUsersService, updateUserService };

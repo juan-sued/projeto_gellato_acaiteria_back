@@ -22,3 +22,23 @@ export interface responseDataUser {
   user: Users;
   addresses: Address[];
 }
+
+export interface UpdateUserData {
+  name?: string;
+  email?: string;
+  phone?: string;
+  cpf?: string;
+  isAdministrator?: boolean;
+  password?: string;
+}
+export interface UpdateAddressData {
+  id?: number;
+  street?: string;
+  number?: number;
+  complement?: string;
+  typeCep?: string;
+  neighborhood?: string;
+  cep?: string;
+  typeCepId?: number;
+  neighborhoodsId?: number;
+}
