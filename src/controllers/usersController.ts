@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
-import { getUsersService, updateUserService } from '../services/usersService';
+import {
+  deleteUserService,
+  getUsersService,
+  updateUserService
+} from '../services/usersService';
 
 export async function getUsersController(request: Request, response: Response) {
   const { name } = request.query;
@@ -14,6 +18,14 @@ export async function updateUserController(request: Request, response: Response)
   const updateUserData = request.body;
 
   await updateUserService(idUser, updateUserData);
+
+  response.sendStatus(200);
+}
+
+export async function deleteUserController(request: Request, response: Response) {
+  const { idUser } = response.locals;
+
+  await deleteUserService(idUser);
 
   response.sendStatus(200);
 }
