@@ -62,8 +62,7 @@ Requisição
         - 409 - usuário ja cadastrado ⇒  message: conflict
         - 404 - usuário não incontrado ⇒ message: usuário inexistente
         - 500 - erro interno do servidor
-      
-      ```
+
 # POST /sign-in
       
  Descrição
