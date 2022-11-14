@@ -79,18 +79,17 @@ Requisição
     
 Body
     
-    ``` json
-     "user" = {
+    ``` "user" = {
     "email": "joaozin@gmail.com",
     "password": "batatinha123"
-    } ```
+    }
+    ```
     
 Response
 
     - Status 200 ⇒ OK
     
-    ```json
-    {
+    ``` {
     "user":{
     	"id": 14,
       "name": "Joe",
