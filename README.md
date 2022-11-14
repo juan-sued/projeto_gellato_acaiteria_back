@@ -35,7 +35,7 @@ npm run dev
 
 
 Você pode ver de forma mais detalhada em:
-https://www.notion.so/PROJETO-GELLATO-GELLATO-ACAITERIA-API-e5d88f0dfa5541eab87fede6a4ef7056
+[https://www.notion.so/PROJETO-GELLATO-GELLATO-ACAITERIA-API-e5d88f0dfa5541eab87fede6a4ef7056](https://quick-success-bfe.notion.site/PROJETO-GELLATO-GELLATO-ACAITERIA-API-e5d88f0dfa5541eab87fede6a4ef7056)
 
 ## ->  AuthRoutes
 
