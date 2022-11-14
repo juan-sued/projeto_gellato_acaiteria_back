@@ -60,18 +60,6 @@ function getAllUsers(): Promise<UsersBasic[]> {
   return prisma.users.findMany(params);
 }
 
-function getAllAdministrators(): Promise<UsersBasic[]> {
-  const params: Prisma.usersFindManyArgs = {
-    where: { isAdministrator: true },
-    select: {
-      id: true,
-      name: true,
-      phone: true
-    }
-  };
-  return prisma.users.findMany(params);
-}
-
 function getUsersByFilterName(name: string): Promise<UsersBasic[]> {
   const params: Prisma.usersFindManyArgs = {
     where: {
@@ -86,25 +74,6 @@ function getUsersByFilterName(name: string): Promise<UsersBasic[]> {
   };
 
   return prisma.users.findMany(params);
-}
-
-function getAdministratorsByFilterName(name: string): Promise<UsersBasic[]> {
-  return prisma.users.findMany({
-    where: {
-      name: {
-        startsWith: `${name}`,
-        mode: 'insensitive'
-      },
-      isAdministrator: true
-    },
-    select: {
-      id: true,
-      name: true,
-      phone: true
-    },
-    skip: 0,
-    take: 5
-  });
 }
 
 //================= INSERT ===================//
@@ -140,8 +109,6 @@ export {
   getUserById,
   getAllUsers,
   getUsersByFilterName,
-  getAllAdministrators,
-  getAdministratorsByFilterName,
   getAddressesByUser,
   updateUser,
   updateAddress,
