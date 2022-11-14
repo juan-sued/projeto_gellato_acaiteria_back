@@ -16,7 +16,13 @@ async function signInService(user: ISign) {
   const userId = Number(userRegistered?.id) ?? 0;
   const token = createToken(userId);
 
-  return token;
+  return {
+    user: {
+      id: userRegistered.id,
+      name: userRegistered.name
+    },
+    token: token
+  };
 }
 
 export { signInService };

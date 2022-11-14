@@ -1,28 +1,33 @@
 import {
-  Address,
   responseDataUser,
   ResponseUsers,
   UpdateUserData,
-  Users
+  UsersBasic
 } from '../../interfaces/userInterfaces ';
 import { usersRepository } from '../../repositories';
 import { errorFactory } from '../../utils';
 import bcrypt from 'bcrypt';
+import { addresses } from '@prisma/client';
+import { exclude } from 'src/utils/prisma-utils';
 
 async function getUsersService(
-  name: string | any,
+  name: string,
   id: string
 ): Promise<ResponseUsers | responseDataUser> {
-  const userList: Users[] = [];
-  const administratorsList: Users[] = [];
+  const userList: UsersBasic[] = [];
+  const administratorsList: UsersBasic[] = [];
 
   const usersListResponse: ResponseUsers = {
     users: userList,
     administrators: administratorsList
   };
 
-  const user: Users = {};
-  const addressesOfUser: Address[] = [];
+  const user: UsersBasic = {
+    id: 1,
+    name: 'name',
+    phone: '12344545'
+  };
+  const addressesOfUser: addresses[] = [];
   const userAllData: responseDataUser = {
     user: user,
     addresses: addressesOfUser
@@ -30,11 +35,10 @@ async function getUsersService(
 
   if (name) {
     const allUsers = await usersRepository.getUsersByFilterName(name);
-    const allAdministrators = await usersRepository.getAdministratorsByFilterName(name);
 
+    const allAdministrators = await usersRepository.getAdministratorsByFilterName(name);
     if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
 
-    usersListResponse.users = allUsers;
     usersListResponse.administrators = allAdministrators;
   } else if (!!id) {
     const userOfResponse = await usersRepository.getUserById(Number(id));

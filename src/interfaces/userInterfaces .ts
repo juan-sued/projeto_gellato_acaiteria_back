@@ -1,27 +1,19 @@
-import { adresses, users } from '@prisma/client';
+import { addresses, users } from '@prisma/client';
 
-export interface Users {
-  id?: number;
-  name?: string;
-  email?: string;
-  phone?: string | null;
-  cpf?: string | null;
-  password?: string;
-  isAdministrator?: boolean;
-}
+//==================== user ==================
+
+export type UsersBasic = Pick<users, 'id' | 'name' | 'phone'>;
 
 export interface ResponseUsers {
-  users: Users[];
-  administrators: Users[];
+  users: UsersBasic[];
+  administrators: UsersBasic[];
 }
-
-export interface Address
-  extends Omit<adresses, 'id' | 'userId' | 'typeCepId' | 'neighborhoodsId'> {}
-
 export interface responseDataUser {
-  user: Users;
-  addresses: Address[];
+  user: UsersBasic;
+  addresses: addresses[];
 }
+
+//================= update ====================
 
 export interface UpdateUserData {
   name?: string;
@@ -42,3 +34,5 @@ export interface UpdateAddressData {
   typeCepId?: number;
   neighborhoodsId?: number;
 }
+
+export type CreateAddressParams = Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>;
