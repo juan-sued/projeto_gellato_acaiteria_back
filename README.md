@@ -79,12 +79,11 @@ Requisição
     
 Body
     
-    ```json
+    ``` json
      "user" = {
     "email": "joaozin@gmail.com",
     "password": "batatinha123"
-    }
-    ```
+    } ```
     
 Response
 
