@@ -45,7 +45,8 @@ Requisição
   Body 
     
   
- ```"userData" = {
+ ```
+ "userData" = {
   "name": "Joãoa",
   "email": "joao7@driven.com.br",
   "password": "drivendasd",
@@ -72,30 +73,30 @@ Requisição
     
 Requisição
     
-    ```html
+    html
     **http://localhost:4000/sign-in**
-    ```
+   
     
 Body
     
-    ``` "user" = {
+    "user" = {
     "email": "joaozin@gmail.com",
     "password": "batatinha123"
     }
-    ```
+  
     
 Response
 
     - Status 200 ⇒ OK
     
-    ``` {
+  {
     "user":{
     	"id": 14,
       "name": "Joe",
     },
     "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6Ik..."
      }
-    ```
+  
     
     Errors
     
