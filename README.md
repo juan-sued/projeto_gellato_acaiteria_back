@@ -36,20 +36,22 @@ npm run dev
 
 ## ->  AuthRoutes
 
-##  - POST ⇒ /sign-up
+ - POST ⇒ /sign-up
 
-  ##  Requisição 
+Requisição 
     
       http://localhost:4000/sign-up
       
-  ##  Body 
+  Body 
     
-      ``` "userData" = {
+      ```
+      "userData" = {
   "name": "Joãoa",
   "email": "joao7@driven.com.br",
   "password": "drivendasd",
   "confirmPassword": "drivendasd"
-}    ```
+}
+ ```
       
       
       
