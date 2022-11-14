@@ -112,7 +112,7 @@ Response
 ==============================================================================================================
 
 
-
+# GET /users :autenticada
 
 - ***Descrição***
     - Retorna uma lista com alguns dados de todos os usuários
@@ -194,6 +194,81 @@ Response
         - 401 - token inválido ⇒  message: token
         - 404 - usuário não incontrado ⇒ message: usuário inexistente
         - 500 - erro interno do servidor
+
+
+
+
+=============================================================================================================
+
+
+
+
+# - **PATCH /users** :autenticada
+    
+    
+    - ***Descrição***
+        - Atualiza os dados do usuário
+        
+    - ***Requisição***
+        
+        ```html
+        **http://localhost:4000/users**
+        ```
+        
+        - **Header**
+            
+            ```json
+            "headers": {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6Ik..."
+             }
+            ```
+            
+        - **Body**
+            
+            ```json
+            "user": 
+            {
+            		"newPhone": "21123456789",
+            		"newPassword": "senhasecreta123",
+            **}**
+            ```
+            
+        
+    - ***Response***
+        - 200 ⇒ OK
+        - **Errors**
+            - 401 - token inválido ⇒  message: token
+            - 404 - usuário não incontrado ⇒ message: usuário inexistente
+            - 500 - erro interno do servidor
+    
+# - **DELETE /users** :autenticada
+    
+    
+    - ***Descrição***
+        - Deleta os dados do usuário
+        
+    - ***Requisição***
+        
+        ```html
+        **http://localhost:4000/users**
+        ```
+        
+        - **Header**
+            
+            ```json
+            "headers": {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6Ik..."
+             }
+            ```
+            
+        
+    - ***Response***
+        - 200 ⇒ OK
+        - **Errors**
+            - 401 - token inválido ⇒  message: token
+            - 404 - usuário não incontrado ⇒ message: usuário inexistente
+            - 500 - erro interno do servidor
+
 
 
 
