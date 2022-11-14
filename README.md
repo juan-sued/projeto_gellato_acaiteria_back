@@ -53,7 +53,7 @@ Requisição
   "confirmPassword": "drivendasd"
 }```
       
- Response
+Response
  
     - 201 ⇒ CREATED
     
@@ -62,6 +62,10 @@ Requisição
         - 409 - usuário ja cadastrado ⇒  message: conflict
         - 404 - usuário não incontrado ⇒ message: usuário inexistente
         - 500 - erro interno do servidor
+        
+        
+==============================================================================================
+
 
 # POST /sign-in
       
@@ -103,3 +107,98 @@ Response
         - 500 - erro interno do servidor
       
       
+      
+      
+==============================================================================================================
+
+
+
+
+- ***Descrição***
+    - Retorna uma lista com alguns dados de todos os usuários
+    - Ao passar uma queryParams **users?name=”ronald”** devem ser retornada uma lista com os usuários filtrados.
+    - Ao passar um “id” no params, é retornado um objeto com informações detalhadas de cada usuário
+- **Header**
+    
+    ```json
+    "headers": {
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6Ik..."
+     }
+    ```
+    
+- ***Requisição para a lista geral de usuários***
+    
+    ```html
+    **http://localhost:4000/users**
+    ```
+    
+- ***Requisição para a lista de usuários filtrados por* character**
+    
+    ```html
+    **http://localhost:4000/users?name="<nome-do-user>"**
+    ```
+    
+- ***Requisição para a lista de usuários filtrados por* character**
+    
+    ```html
+    **http://localhost:4000/users/<id-do-user>**
+    ```
+    
+- ***Response básico***
+    
+    ```json
+    "users": [
+    {
+    		"id": 11
+    	  "name": "Juan Sued Oliveira de Souza",
+    		"phone": "21123456789",
+    
+    **},**
+    {
+    		"id": 5
+    	  "name": "Ronaldinho Gaúcho",
+    		"phone": "null",
+    **}
+    ],"**administrators**":[**
+    {
+    		"id": 1
+    	  "name": "Alessandra Meireles",
+    		"phone": "21123456789",
+    **}]**
+    ```
+    
+    - **Errors**
+        - 401 - token inválido ⇒  message: token
+        - 404 - usuário não incontrado ⇒ message: usuário inexistente
+        - 500 - erro interno do servidor
+    
+- ***Response detalhado***
+    
+    ```json
+    "user": {
+      "user": {
+        "id": 2,
+        "name": "Joana",
+        "email": "joana2430@driven.com.br",
+        "phone": null,
+        "cpf": null,
+        "createdAt": "2022-11-13T18:22:56.864Z",
+        "updatedAt": "2022-11-13T18:22:56.864Z",
+        "isAdministrator": false
+      },
+      "addresses": []
+    }
+    ```
+    
+    - **Errors**
+        - 401 - token inválido ⇒  message: token
+        - 404 - usuário não incontrado ⇒ message: usuário inexistente
+        - 500 - erro interno do servidor
+
+
+
+
+
+
+
+
