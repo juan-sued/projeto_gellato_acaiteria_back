@@ -16,16 +16,15 @@ async function getUsersService(
 ): Promise<ResponseUsers | responseDataUser> {
   const userList: UsersBasic[] = [];
   const administratorsList: UsersBasic[] = [];
-
   const usersListResponse: ResponseUsers = {
     users: userList,
     administrators: administratorsList
   };
 
   const user: UsersBasic = {
-    id: 1,
-    name: 'name',
-    phone: '12344545'
+    id: 0,
+    name: 'modelo',
+    phone: 'modelo'
   };
   const addressesOfUser: addresses[] = [];
   const userAllData: responseDataUser = {
@@ -38,8 +37,9 @@ async function getUsersService(
 
     const allAdministrators = await usersRepository.getAdministratorsByFilterName(name);
     if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
-
     usersListResponse.administrators = allAdministrators;
+    usersListResponse.users = allUsers;
+    console.log(allUsers);
   } else if (!!id) {
     const userOfResponse = await usersRepository.getUserById(Number(id));
     if (!userOfResponse) throw errorFactory.notFound('user');
@@ -52,7 +52,6 @@ async function getUsersService(
   } else {
     const allUsers = await usersRepository.getAllUsers();
     const allAdministrators = await usersRepository.getAllAdministrators();
-
     if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
 
     usersListResponse.users = allUsers;

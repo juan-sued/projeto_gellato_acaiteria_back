@@ -8,10 +8,10 @@ import validateJwtTokenMiddleware from '../middlewares/validateJwtTokenMiddlewar
 
 const usersRouter = Router();
 
-usersRouter.get('/users', validateJwtTokenMiddleware, getUsersController);
-usersRouter.get('/users/:id', validateJwtTokenMiddleware, getUsersController);
-
-usersRouter.patch('/users', validateJwtTokenMiddleware, updateUserController);
-usersRouter.delete('/users', validateJwtTokenMiddleware, deleteUserController);
-
+usersRouter
+  .all('/*', validateJwtTokenMiddleware)
+  .get('/', getUsersController)
+  .get('/:id', getUsersController)
+  .patch('/', updateUserController)
+  .delete('/', deleteUserController);
 export { usersRouter };

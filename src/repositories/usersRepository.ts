@@ -73,6 +73,7 @@ function getAllAdministrators(): Promise<UsersBasic[]> {
 }
 
 function getUsersByFilterName(name: string): Promise<UsersBasic[]> {
+  console.log(name);
   const params: Prisma.usersFindManyArgs = {
     where: {
       name: {
@@ -80,6 +81,11 @@ function getUsersByFilterName(name: string): Promise<UsersBasic[]> {
         mode: 'insensitive'
       },
       isAdministrator: false
+    },
+    select: {
+      id: true,
+      name: true,
+      phone: true
     },
     skip: 0,
     take: 5

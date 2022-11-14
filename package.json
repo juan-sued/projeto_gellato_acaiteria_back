@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc && npx prisma generate && npx prisma migrate deploy && npx prisma db seed",
     "start": "node ./dist/src/server.js",
-    "test": "NODE_ENV=test npx prisma migrate dev && npx prisma db seed && jest --no-cache",
+    "migration": "npx prisma migrate dev",
     "dev": "npx nodemon ./src/server.ts"
   },
   "keywords": [],

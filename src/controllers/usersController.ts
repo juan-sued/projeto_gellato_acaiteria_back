@@ -16,7 +16,7 @@ export async function getUsersController(request: Request, response: Response) {
 export async function updateUserController(request: Request, response: Response) {
   const { idUser } = response.locals;
   const updateUserData = request.body;
-  console.log('aaa');
+
   await updateUserService(idUser, updateUserData);
 
   response.sendStatus(200);
