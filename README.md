@@ -45,8 +45,7 @@ Requisição
   Body 
     
   
- ```
- "userData" = {
+ ``` "userData" = {
   "name": "Joãoa",
   "email": "joao7@driven.com.br",
   "password": "drivendasd",
@@ -54,7 +53,57 @@ Requisição
 }
 ```
       
+ Response
+ 
+    - 201 ⇒ CREATED
+    
+    - Errors: 
+        - 422 - dados inválidos ⇒  message: error_unprocessable_entity
+        - 409 - usuário ja cadastrado ⇒  message: conflict
+        - 404 - usuário não incontrado ⇒ message: usuário inexistente
+        - 500 - erro interno do servidor
       
       
+      
+      
+      
+ Descrição
+   
+    - login do usuário
+    
+Requisição
+    
+    ```html
+    **http://localhost:4000/sign-in**
+    ```
+    
+Body
+    
+    ```json
+     "user" = {
+    "email": "joaozin@gmail.com",
+    "password": "batatinha123"
+    }
+    ```
+    
+Response
+
+    - Status 200 ⇒ OK
+    
+    ```json
+    {
+    "user":{
+    	"id": 14,
+      "name": "Joe",
+    },
+    "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6Ik..."
+     }
+    ```
+    
+    Errors
+    
+        - 422 - dados inválidos ⇒  message: error_unprocessable_entity
+        - 404 - usuário não incontrado ⇒ message: usuário inexistente
+        - 500 - erro interno do servidor
       
       
