@@ -20,7 +20,7 @@ async function validateJwtTokenMiddleware(
   if (!token) throw errorFactory.unauthorized('token');
 
   const payload = await decodedToken(token);
-  console.log('aqui');
+
   const user = await usersRepository.getUserById(payload.id);
 
   if (!user) throw errorFactory.notFound('usuário inexistente');

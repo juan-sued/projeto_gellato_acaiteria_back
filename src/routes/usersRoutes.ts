@@ -1,8 +1,11 @@
 import { Router } from 'express';
+import { validateSchemaMiddleware } from '../middlewares/validateSchemaMiddleware';
+import { addressSchema } from '../schemas/addressSchema';
 import {
   getUsersController,
   updateUserController,
-  deleteUserController
+  deleteUserController,
+  insertAddressesController
 } from '../controllers/usersController';
 import validateJwtTokenMiddleware from '../middlewares/validateJwtTokenMiddleware';
 
@@ -13,5 +16,11 @@ usersRouter
   .get('/', getUsersController)
   .get('/:id', getUsersController)
   .patch('/', updateUserController)
-  .delete('/', deleteUserController);
+  .delete('/', deleteUserController)
+  .post(
+    '/addresses/',
+    validateSchemaMiddleware(addressSchema),
+    insertAddressesController
+  );
+
 export { usersRouter };

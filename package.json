@@ -7,7 +7,8 @@
     "build": "npx tsc && npx prisma generate && npx prisma migrate deploy && npx prisma db seed",
     "start": "node ./dist/src/server.js",
     "migration": "npx prisma migrate dev",
-    "dev": "npx nodemon ./src/server.ts"
+    "dev": "npx nodemon ./src/server.ts",
+    "studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "Juan Sued",

@@ -1,10 +1,11 @@
 import {
+  CreateAddressParams,
   responseDataUser,
   ResponseUsers,
   UpdateUserData,
   UsersBasic
 } from '../../interfaces/userInterfaces ';
-import { usersRepository } from '../../repositories';
+import { usersRepository, addressesRepository } from '../../repositories';
 import { errorFactory } from '../../utils';
 import bcrypt from 'bcrypt';
 import { addresses } from '@prisma/client';
@@ -39,13 +40,12 @@ async function getUsersService(
     if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
     usersListResponse.administrators = allAdministrators;
     usersListResponse.users = allUsers;
-    console.log(allUsers);
   } else if (!!id) {
     const userOfResponse = await usersRepository.getUserById(Number(id));
     if (!userOfResponse) throw errorFactory.notFound('user');
     userAllData.user = userOfResponse;
 
-    const addresses = await usersRepository.getAddressesByUser(Number(id));
+    const addresses = await addressesRepository.getAddressesByUser(Number(id));
 
     userAllData.addresses = addresses;
     return userAllData;
@@ -83,6 +83,26 @@ async function updateUserService(id: string, updateUserData: UpdateUserData) {
 async function deleteUserService(id: string) {
   if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
   await usersRepository.deleteUser(Number(id));
+}
+
+//====================== Addresses =========================//
+
+export async function registerAddressService(
+  id: number,
+  newAddressData: CreateAddressParams
+) {
+  const data = {
+    userId: id,
+    number: newAddressData.number,
+    cep: newAddressData.cep,
+    street: newAddressData.street,
+    city: newAddressData.city,
+    state: newAddressData.state,
+    neighborhood: newAddressData.neighborhood,
+    addressDetail: newAddressData.addressDetail
+  };
+
+  await addressesRepository.insertAddress(id, data);
 }
 
 export { getUsersService, updateUserService, deleteUserService };
