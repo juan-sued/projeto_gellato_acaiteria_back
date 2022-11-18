@@ -3,6 +3,7 @@ import {
   deleteUserService,
   getUsersService,
   registerAddressService,
+  updateAddressService,
   updateUserService
 } from '../services/usersService';
 
@@ -40,6 +41,16 @@ export async function insertAddressesController(request: Request, response: Resp
   const newAddressData = request.body;
 
   await registerAddressService(idUser, newAddressData);
+
+  response.sendStatus(200);
+}
+
+export async function updateAddressesController(request: Request, response: Response) {
+  const { idAddress } = request.params;
+  const { idUser } = response.locals;
+  const newAddressData = request.body;
+
+  await updateAddressService(idAddress, idUser, newAddressData);
 
   response.sendStatus(200);
 }

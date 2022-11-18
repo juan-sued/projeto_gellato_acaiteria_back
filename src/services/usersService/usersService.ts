@@ -2,14 +2,14 @@ import {
   CreateAddressParams,
   responseDataUser,
   ResponseUsers,
+  UpdateAddressData,
   UpdateUserData,
   UsersBasic
 } from '../../interfaces/userInterfaces ';
 import { usersRepository, addressesRepository } from '../../repositories';
-import { errorFactory } from '../../utils';
+import { errorFactory, prismaUtils } from '../../utils';
 import bcrypt from 'bcrypt';
 import { addresses } from '@prisma/client';
-import { exclude } from 'src/utils/prisma-utils';
 
 async function getUsersService(
   name: string,
@@ -87,10 +87,7 @@ async function deleteUserService(id: string) {
 
 //====================== Addresses =========================//
 
-export async function registerAddressService(
-  id: number,
-  newAddressData: CreateAddressParams
-) {
+async function registerAddressService(id: number, newAddressData: CreateAddressParams) {
   const data = {
     userId: id,
     number: newAddressData.number,
@@ -105,4 +102,49 @@ export async function registerAddressService(
   await addressesRepository.insertAddress(id, data);
 }
 
-export { getUsersService, updateUserService, deleteUserService };
+async function updateAddressService(
+  idAddress: string,
+  idUser: number,
+  newAddressData: UpdateAddressData
+) {
+  const address = await addressesRepository.getAddressesByUser(idUser);
+
+  console.log(address);
+
+  if (!address) throw errorFactory.notFound('endereço');
+
+  const addressOfId = address.filter(address => address.id === Number(idAddress));
+
+  if (!addressOfId) throw errorFactory.notFound('endereço id');
+
+  const data = {
+    number: newAddressData.number,
+    cep: newAddressData.cep,
+    street: newAddressData.street,
+    city: newAddressData.city,
+    state: newAddressData.state,
+    neighborhood: newAddressData.neighborhood,
+    addressDetail: newAddressData.addressDetail
+  };
+
+  const dataClean: UpdateAddressData = prismaUtils.excludeEmpty(
+    data,
+    'number',
+    'cep',
+    'street',
+    'city',
+    'state',
+    'neighborhood',
+    'addressDetail'
+  );
+
+  await addressesRepository.updateAddress(Number(idAddress), dataClean);
+}
+
+export {
+  getUsersService,
+  updateUserService,
+  deleteUserService,
+  updateAddressService,
+  registerAddressService
+};

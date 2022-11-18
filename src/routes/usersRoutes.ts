@@ -5,9 +5,11 @@ import {
   getUsersController,
   updateUserController,
   deleteUserController,
-  insertAddressesController
+  insertAddressesController,
+  updateAddressesController
 } from '../controllers/usersController';
 import validateJwtTokenMiddleware from '../middlewares/validateJwtTokenMiddleware';
+import { addressSchemas } from '../schemas';
 
 const usersRouter = Router();
 
@@ -17,10 +19,11 @@ usersRouter
   .get('/:id', getUsersController)
   .patch('/', updateUserController)
   .delete('/', deleteUserController)
-  .post(
-    '/addresses/',
-    validateSchemaMiddleware(addressSchema),
-    insertAddressesController
+  .post('/addresses/', validateSchemaMiddleware(addressSchema), insertAddressesController)
+  .patch(
+    '/addresses/:idAddress',
+    validateSchemaMiddleware(addressSchemas.updateAddressSchema),
+    updateAddressesController
   );
 
 export { usersRouter };
