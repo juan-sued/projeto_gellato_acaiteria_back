@@ -9,7 +9,7 @@ import {
   updateAddressesController
 } from '../controllers/usersController';
 import validateJwtTokenMiddleware from '../middlewares/validateJwtTokenMiddleware';
-import { addressSchemas } from '../schemas';
+import { addressSchemas, updateUserSchema } from '../schemas';
 
 const usersRouter = Router();
 
@@ -17,7 +17,11 @@ usersRouter
   .all('/*', validateJwtTokenMiddleware)
   .get('/', getUsersController)
   .get('/:id', getUsersController)
-  .patch('/', updateUserController)
+  .patch(
+    '/',
+    validateSchemaMiddleware(updateUserSchema.updateUserSchema),
+    updateUserController
+  )
   .delete('/', deleteUserController)
   .post('/addresses/', validateSchemaMiddleware(addressSchema), insertAddressesController)
   .patch(

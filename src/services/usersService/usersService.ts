@@ -35,7 +35,6 @@ async function getUsersService(
 
   if (name) {
     const allUsers = await usersRepository.getUsersByFilterName(name);
-
     const allAdministrators = await usersRepository.getAdministratorsByFilterName(name);
     if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
     usersListResponse.administrators = allAdministrators;
@@ -62,20 +61,27 @@ async function getUsersService(
 }
 
 async function updateUserService(id: string, updateUserData: UpdateUserData) {
-  if (!updateUserData.email || !updateUserData.password || !id)
-    throw errorFactory.unprocessableEntity([
-      'email inexistent or',
-      'id inexistent or',
-      'password inexistent'
-    ]);
+  const dataClean: UpdateUserData = prismaUtils.excludeEmpty(
+    updateUserData,
+    'name',
+    'email',
+    'phone',
+    'cpf',
+    'isAdministrator',
+    'password'
+  );
 
-  const user = await usersRepository.getUserByEmail(updateUserData.email);
-  if (user) throw errorFactory.conflict('user existent');
+  if (dataClean.email) {
+    const user = await usersRepository.getUserByEmail(dataClean.email);
+    if (user) throw errorFactory.unprocessableEntity(['email já cadastrado']);
+  }
 
-  const passwordCripted = await bcrypt.hash(updateUserData.password, 10);
-  updateUserData.password = passwordCripted;
+  if (dataClean.password) {
+    const passwordCripted = await bcrypt.hash(dataClean.password, 10);
+    dataClean.password = passwordCripted;
+  }
 
-  await usersRepository.updateUser(Number(id), updateUserData);
+  await usersRepository.updateUser(Number(id), dataClean);
 
   return;
 }
@@ -90,7 +96,7 @@ async function deleteUserService(id: string) {
 async function registerAddressService(id: number, newAddressData: CreateAddressParams) {
   const data = {
     userId: id,
-    number: newAddressData.number,
+    number: Number(newAddressData.number),
     cep: newAddressData.cep,
     street: newAddressData.street,
     city: newAddressData.city,
@@ -109,26 +115,14 @@ async function updateAddressService(
 ) {
   const address = await addressesRepository.getAddressesByUser(idUser);
 
-  console.log(address);
-
-  if (!address) throw errorFactory.notFound('endereço');
+  if (address.length === (undefined || 0)) throw errorFactory.notFound('endereço');
 
   const addressOfId = address.filter(address => address.id === Number(idAddress));
 
   if (!addressOfId) throw errorFactory.notFound('endereço id');
 
-  const data = {
-    number: newAddressData.number,
-    cep: newAddressData.cep,
-    street: newAddressData.street,
-    city: newAddressData.city,
-    state: newAddressData.state,
-    neighborhood: newAddressData.neighborhood,
-    addressDetail: newAddressData.addressDetail
-  };
-
   const dataClean: UpdateAddressData = prismaUtils.excludeEmpty(
-    data,
+    newAddressData,
     'number',
     'cep',
     'street',

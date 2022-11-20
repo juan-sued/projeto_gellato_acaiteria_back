@@ -15,6 +15,9 @@ export function excludeEmpty<T, Key extends keyof T>(
     if (newEntity[key] === (0 || '')) {
       delete newEntity[key];
     }
+    if (newEntity['number']) {
+      newEntity['number'] = Number(newEntity['number']);
+    }
   }
   return newEntity;
 }
