@@ -81,6 +81,11 @@ function getUsersByFilterName(name: string): Promise<UsersBasic[]> {
       },
       isAdministrator: false
     },
+    select: {
+      id: true,
+      name: true,
+      phone: true
+    },
     skip: 0,
     take: 5
   };
@@ -128,8 +133,6 @@ async function updateUser(id: number, updateUserData: UpdateUserData) {
   if (!resultUsers) throw { type: 'error' };
 }
 
-async function updateAddress(id: number, updateAddress: UpdateAddressData) {}
-
 async function deleteUser(id: number) {
   await prisma.users.delete({ where: { id: id } });
 }
@@ -144,6 +147,5 @@ export {
   getAdministratorsByFilterName,
   getAddressesByUser,
   updateUser,
-  updateAddress,
   deleteUser
 };

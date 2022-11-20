@@ -25,14 +25,13 @@ export interface UpdateUserData {
 }
 export interface UpdateAddressData {
   id?: number;
-  street?: string;
   number?: number;
-  complement?: string;
-  typeCep?: string;
-  neighborhood?: string;
   cep?: string;
-  typeCepId?: number;
-  neighborhoodsId?: number;
+  street?: string;
+  city?: string;
+  state?: string;
+  neighborhood?: string;
+  addressDetail?: string;
 }
 
 export type CreateAddressParams = Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>;
