@@ -1,4 +1,4 @@
-import { prisma } from '../databases/postgreSQL';
+import { prisma } from '@/databases/postgreSQL';
 
 //=================== GET =====================//
 function getFavoritedsById(id: number) {

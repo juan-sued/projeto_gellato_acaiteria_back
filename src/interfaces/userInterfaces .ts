@@ -35,4 +35,7 @@ export interface UpdateAddressData {
   neighborhoodsId?: number;
 }
 
-export type CreateAddressParams = Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>;
+export type CreateAddressParams = Omit<
+  addresses,
+  'id' | 'createdAt' | 'updatedAt'
+>;

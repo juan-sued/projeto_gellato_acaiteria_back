@@ -10,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//=====================  users =====================//
 model users {
   id              Int      @id @default(autoincrement())
   name            String   @db.VarChar(255)
@@ -26,40 +25,34 @@ model users {
   feedbacks  feedbacks[]
   orders     orders[]
   addresses  addresses[]
+  customizedProducts customizedProducts[]
+
 }
 
+
+
 model feedbacks {
-  id       Int     @id @default(autoincrement())
-  userId   Int     @db.SmallInt()
-  feedback String? @db.Text()
-  stars    String  @db.VarChar(3)
+  id        Int     @id @default(autoincrement())
+  userId    Int     @db.SmallInt()
+  feedbacks String? @db.Text()
+  stars     String  @db.VarChar(3)
 
   user users @relation(fields: [userId], references: [id])
 }
 
-//=====================  products =====================//
-
-model products {
-  id             Int          @id @default(autoincrement())
-  title          String       @unique @db.VarChar(150)
-  image          String       @db.VarChar(100)
-  price          Int          @db.SmallInt()
-  description    String       @db.VarChar(70)
-  categoryId     Int          @db.SmallInt()
-  quantityPerCup Decimal      @db.Decimal()
-  isOfertOfDay   Boolean      @default(false) @db.Boolean()
-  favoriteds     favoriteds[]
-  category       categories   @relation(fields: [categoryId], references: [id])
-  orders         orders[]
-  stock          stock[]
-  historic       historic[]
+model ofertsDay {
+  id          Int      @id @default(autoincrement())
+  productId   Int      @db.SmallInt()
+  description String   @unique @db.VarChar(100)
+  priceOfert  Decimal  @db.Decimal()
+  product     products @relation(fields: [productId], references: [id])
 }
 
 model categories {
   id          Int        @id @default(autoincrement())
-  category    String     @unique @db.VarChar(50)
+  categories  String     @unique @db.VarChar(50)
   description String     @unique @db.VarChar(100)
-  products    products[]
+  product     products[]
 }
 
 model favoriteds {
@@ -74,13 +67,12 @@ model orders {
   id          Int       @id @default(autoincrement())
   userId      Int       @db.SmallInt()
   productId   Int       @db.SmallInt()
-  createdAt   DateTime  @db.Timestamp()
+  createdAt   DateTime  @default(now())
   isDelivered DateTime? @db.Timestamp()
   user        users     @relation(fields: [userId], references: [id])
   product     products  @relation(fields: [productId], references: [id])
 }
 
-//=====================  adresses =====================//
 model addresses {
   id              Int      @id @default(autoincrement())
   userId          Int      @db.Integer
@@ -96,22 +88,40 @@ model addresses {
   updatedAt       DateTime @updatedAt
 }
 
-//=====================  administrator =====================//
+model products {
+  id               Int     @id @default(autoincrement())
+  title            String  @unique @db.VarChar(150)
+  image            String  @db.VarChar(100)
+  price            Decimal @db.Decimal()
+  description      String  @db.VarChar(70)
+  categoryId       Int     @db.SmallInt()
+  unitOfMeasure    String  @db.VarChar(20)
+  amount           Int     @db.Integer()
+  quantityForUnity Decimal @db.Decimal()
 
-model stock {
-  id           Int      @id @default(autoincrement())
-  productId    Int      @db.SmallInt()
-  quantity     Int      @db.Integer()
-  purchaseDate DateTime @db.Date()
-  notes        String   @db.Text()
-  product      products @relation(fields: [productId], references: [id])
+  favoriteds favoriteds[]
+  categories categories   @relation(fields: [categoryId], references: [id])
+  orders     orders[]
+  ofertsDay  ofertsDay[]
+
+  customizedProducts customizedProducts_products[]
 }
 
-model historic {
-  id           Int      @id @default(autoincrement())
-  productId    Int      @db.SmallInt()
-  salesCounter Int      @db.Integer()
-  dataSold     DateTime @db.Date()
-  productValue Int      @db.SmallInt()
-  product      products @relation(fields: [productId], references: [id])
+model customizedProducts_products {
+  id                  Int                @id @default(autoincrement())
+  productCustomizedId Int
+  productId           Int
+  productCustomized   customizedProducts @relation(fields: [productCustomizedId], references: [id])
+  product             products           @relation(fields: [productId], references: [id])
+}
+
+model customizedProducts {
+  id        Int                           @id @default(autoincrement())
+  name      String
+  image     String
+  price     Float
+  cupsizeId  Int
+  authorId Int 
+  products  customizedProducts_products[]
+  author users @relation(fields: [authorId], references: [id])
 }

@@ -3,8 +3,8 @@ import {
   getUsersController,
   updateUserController,
   deleteUserController
-} from '../controllers/usersController';
-import validateJwtTokenMiddleware from '../middlewares/validateJwtTokenMiddleware';
+} from '@/controllers/usersController';
+import validateJwtTokenMiddleware from '@/middlewares/validateJwtTokenMiddleware';
 
 const usersRouter = Router();
 

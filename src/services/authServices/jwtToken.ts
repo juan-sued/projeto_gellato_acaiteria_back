@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { errorFactory } from '../../utils';
+import { errorFactory } from '@/utils';
 dotenv.config();
 
 interface Payload {
@@ -9,7 +9,7 @@ interface Payload {
   exp: number;
 }
 
-const SECRET: jwt.Secret = process.env.SECRET_KEY || '!5S5G6$1AE@';
+const SECRET: jwt.Secret = process.env.SECRET_KEY || 'DAMASCO_AZUL';
 const EXPIRED_TIME = process.env.TOKEN_EXP_TIME || '24h';
 
 const createToken = (userId: number) => {
@@ -18,10 +18,10 @@ const createToken = (userId: number) => {
 };
 
 async function decodedToken(token: string) {
-  const decoded = jwt.verify(token, SECRET) as Payload;
-  if (!decoded) {
-    throw errorFactory.unauthorized('valid token');
-  }
+  const decoded = jwt.verify(token, SECRET) as jwt.JwtPayload;
+
+  if (!decoded) throw errorFactory.unauthorized('invalid token');
+
   return decoded;
 }
 export { createToken, decodedToken };

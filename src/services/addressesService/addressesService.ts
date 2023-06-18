@@ -3,12 +3,11 @@ import {
   ResponseUsers,
   UpdateUserData,
   UsersBasic
-} from '../../interfaces/userInterfaces ';
-import { usersRepository } from '../../repositories';
-import { errorFactory } from '../../utils';
+} from '@/interfaces/userInterfaces ';
+import { usersRepository } from '@/repositories';
+import { errorFactory } from '@/utils';
 import bcrypt from 'bcrypt';
 import { addresses } from '@prisma/client';
-import { exclude } from 'src/utils/prisma-utils';
 
 async function getUsersService(
   name: string,
@@ -36,7 +35,8 @@ async function getUsersService(
   if (name) {
     const allUsers = await usersRepository.getUsersByFilterName(name);
 
-    const allAdministrators = await usersRepository.getAdministratorsByFilterName(name);
+    const allAdministrators =
+      await usersRepository.getAdministratorsByFilterName(name);
     if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
 
     usersListResponse.administrators = allAdministrators;
@@ -86,4 +86,10 @@ async function deleteUserService(id: string) {
   await usersRepository.deleteUser(Number(id));
 }
 
-export { getUsersService, updateUserService, deleteUserService };
+const addressesService = {
+  getUsersService,
+  updateUserService,
+  deleteUserService
+};
+
+export default addressesService;

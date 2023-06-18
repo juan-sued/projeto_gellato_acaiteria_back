@@ -1,13 +1,10 @@
-
-import { getFavoritedByIdService } from '../services/favoritedsServices/getFavoritedsService';
-
-
+import favoritedsService from '@/services/favoritedsServices/favoritedsService';
 import { Request, Response } from 'express';
 
-export async function homeContentController(request :Request, response:Response) {
+export async function homeContentController(request: Request, response: Response) {
   const { idUser } = response.locals;
- 
-  const favoritedsList = await getFavoritedByIdService(idUser);
 
-  response.status(200).send(favoritedsList);    
+  const favoritedsList = await favoritedsService.getFavoritedByIdService(idUser);
+
+  response.status(200).send(favoritedsList);
 }

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import { ISign } from '../../interfaces/authInterfaces';
-import { usersRepository } from '../../repositories';
-import { errorFactory } from '../../utils';
+import { ISign } from '@/interfaces/authInterfaces';
+import { usersRepository } from '@/repositories';
+import { errorFactory } from '@/utils';
 import { createToken } from './jwtToken';
 
 async function signInService(user: ISign) {
