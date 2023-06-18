@@ -1,6 +1,5 @@
 import favoritedsService from '@/services/favoritedsServices/favoritedsService';
 import { Request, Response } from 'express';
-
 export async function homeContentController(request: Request, response: Response) {
   const { idUser } = response.locals;
 
