@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getUsersController, updateUserController, deleteUserController } from '@/controllers/usersController';
 import validateJwtTokenMiddleware from '@/middlewares/validateJwtTokenMiddleware';
-import { insertAddress } from '@/controllers/addressesController';
+import { getAddresses, insertAddress } from '@/controllers/addressesController';
 
 const usersRouter = Router();
 
@@ -10,7 +10,6 @@ usersRouter
   .get('/', getUsersController)
   .get('/:id', getUsersController)
   .patch('/', updateUserController)
-  .delete('/', deleteUserController)
-  .post('/addresses', insertAddress);
+  .delete('/', deleteUserController);
 
 export { usersRouter };

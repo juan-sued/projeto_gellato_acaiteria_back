@@ -24,18 +24,14 @@ export interface UpdateUserData {
   password?: string;
 }
 export interface UpdateAddressData {
-  id?: number;
-  street?: string;
-  number?: number;
-  complement?: string;
-  typeCep?: string;
-  neighborhood?: string;
   cep?: string;
-  typeCepId?: number;
-  neighborhoodsId?: number;
+  street?: string;
+  city?: string;
+  state?: string;
+  number?: string;
+  neighborhood?: string;
+  complement?: string;
+  addressDetail?: string;
 }
 
-export type CreateAddressParams = Omit<
-  addresses,
-  'id' | 'createdAt' | 'updatedAt'
->;
+export type CreateAddressParams = Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>;

@@ -1,90 +1,72 @@
-import { responseDataUser, ResponseUsers, UpdateUserData, UsersBasic } from '@/interfaces/userInterfaces ';
+import {
+  responseDataUser,
+  ResponseUsers,
+  UpdateAddressData,
+  UpdateUserData,
+  UsersBasic,
+} from '@/interfaces/userInterfaces ';
 import { addressesRepository, usersRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
 import bcrypt from 'bcrypt';
 import { addresses } from '@prisma/client';
 
-export const createAddress = async (
-  addressData: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>,
-): Promise<addresses> => {
-  const createdAddress = await addressesRepository.insertAddress(addressData);
+async function createAddress(newAddress: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>): Promise<addresses> {
+  const result = await isDuplicateAddress(newAddress);
+
+  if (result) throw errorFactory.conflict('address already exists');
+  const createdAddress = await addressesRepository.insertAddress(newAddress);
 
   return createdAddress;
-};
-
-async function getUsersService(name: string, id: string): Promise<ResponseUsers | responseDataUser> {
-  const userList: UsersBasic[] = [];
-  const administratorsList: UsersBasic[] = [];
-
-  const usersListResponse: ResponseUsers = {
-    users: userList,
-    administrators: administratorsList,
-  };
-
-  const user: UsersBasic = {
-    id: 1,
-    name: 'name',
-    phone: '12344545',
-  };
-  const addressesOfUser: addresses[] = [];
-  const userAllData: responseDataUser = {
-    user: user,
-    addresses: addressesOfUser,
-  };
-
-  if (name) {
-    const allUsers = await usersRepository.getUsersByFilterName(name);
-
-    const allAdministrators = await usersRepository.getAdministratorsByFilterName(name);
-    if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
-
-    usersListResponse.administrators = allAdministrators;
-  } else if (!!id) {
-    const userOfResponse = await usersRepository.getUserById(Number(id));
-    if (!userOfResponse) throw errorFactory.notFound('user');
-    userAllData.user = userOfResponse;
-
-    const addresses = await usersRepository.getAddressesByUser(Number(id));
-
-    userAllData.addresses = addresses;
-    return userAllData;
-  } else {
-    const allUsers = await usersRepository.getAllUsers();
-    const allAdministrators = await usersRepository.getAllAdministrators();
-
-    if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
-
-    usersListResponse.users = allUsers;
-    usersListResponse.administrators = allAdministrators;
-  }
-
-  return usersListResponse;
 }
 
-async function updateUserService(id: string, updateUserData: UpdateUserData) {
-  if (!updateUserData.email || !updateUserData.password || !id)
+async function getAllAddresses(id: number): Promise<addresses[]> {
+  const addresses = await addressesRepository.getAddressesByUser(id);
+  if (!addresses) throw errorFactory.notFound('address');
+
+  return addresses;
+}
+
+async function getAddressById(id: string): Promise<addresses> {
+  const address: addresses = await addressesRepository.getAddressById(Number(id));
+  if (!address) throw errorFactory.notFound('address');
+
+  return address;
+}
+
+async function updateAddress(id: string, updateAddressData: UpdateAddressData) {
+  if (
+    !updateAddressData.cep ||
+    !updateAddressData.complement ||
+    !updateAddressData.neighborhood ||
+    !updateAddressData.addressDetail ||
+    !updateAddressData.number ||
+    !updateAddressData.street ||
+    !updateAddressData.state ||
+    !id
+  )
     throw errorFactory.unprocessableEntity(['email inexistent or', 'id inexistent or', 'password inexistent']);
 
-  const user = await usersRepository.getUserByEmail(updateUserData.email);
-  if (user) throw errorFactory.conflict('user existent');
-
-  const passwordCripted = await bcrypt.hash(updateUserData.password, 10);
-  updateUserData.password = passwordCripted;
-
-  await usersRepository.updateUser(Number(id), updateUserData);
+  await addressesRepository.updateAddress(Number(id), updateAddressData);
 
   return;
 }
 
-async function deleteUserService(id: string) {
-  if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
-  await usersRepository.deleteUser(Number(id));
+// async function deleteAddress(id: string) {
+//   if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
+//   await addressesRepository.deleteAddress(Number(id));
+// }
+async function isDuplicateAddress(newAddress: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>) {
+  const addresses = await addressesRepository.getAddressesByUser(newAddress.userId);
+
+  return addresses.some((address) => {
+    return (
+      address.street === newAddress.street &&
+      address.number === newAddress.number &&
+      address.city === newAddress.city &&
+      address.state === newAddress.state &&
+      address.neighborhood === newAddress.neighborhood &&
+      address.cep === newAddress.cep
+    );
+  });
 }
-
-const addressesService = {
-  getUsersService,
-  updateUserService,
-  deleteUserService,
-};
-
-export default addressesService;
+export { getAllAddresses, createAddress, getAddressById, updateAddress };

@@ -1,6 +1,7 @@
 import { products } from '@prisma/client';
 import { productsService } from '@/services';
 import { Request, Response } from 'express';
+import { ProductBasic } from '@/interfaces/productsInterfaces';
 
 export async function insertProduct(request: Request, response: Response) {
   const newProduct: products = request.body;
@@ -12,9 +13,9 @@ export async function insertProduct(request: Request, response: Response) {
 export async function getProducts(request: Request, response: Response) {
   const { name } = request.query as Record<string, string>;
   const { id } = request.params;
-  let result: any = [];
+  let result: ProductBasic[] | products = [];
 
-  if (name) result = await productsService.getOfertsDayByName(name);
+  if (name) result = await productsService.getProductsByName(name);
 
   if (id) result = await productsService.getProductById(id);
 

@@ -1,42 +1,33 @@
-import {
-  responseDataUser,
-  ResponseUsers,
-  UpdateUserData,
-  UsersBasic
-} from '@/interfaces/userInterfaces ';
-import { usersRepository } from '@/repositories';
+import { responseDataUser, ResponseUsers, UpdateUserData, UsersBasic } from '@/interfaces/userInterfaces ';
+import { addressesRepository, usersRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
 import { addresses } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
-async function getUsersService(
-  name: string,
-  id: string
-): Promise<ResponseUsers | responseDataUser> {
+async function getUsersService(name: string, id: string): Promise<ResponseUsers | responseDataUser> {
   const userList: UsersBasic[] = [];
   const administratorsList: UsersBasic[] = [];
 
   const usersListResponse: ResponseUsers = {
     users: userList,
-    administrators: administratorsList
+    administrators: administratorsList,
   };
 
   const user: UsersBasic = {
     id: 1,
     name: 'name',
-    phone: '12344545'
+    phone: '12344545',
   };
   const addressesOfUser: addresses[] = [];
   const userAllData: responseDataUser = {
     user: user,
-    addresses: addressesOfUser
+    addresses: addressesOfUser,
   };
 
   if (name) {
     const allUsers = await usersRepository.getUsersByFilterName(name);
 
-    const allAdministrators =
-      await usersRepository.getAdministratorsByFilterName(name);
+    const allAdministrators = await usersRepository.getAdministratorsByFilterName(name);
     if (!allUsers && !allAdministrators) throw errorFactory.notFound('user');
 
     usersListResponse.administrators = allAdministrators;
@@ -45,7 +36,7 @@ async function getUsersService(
     if (!userOfResponse) throw errorFactory.notFound('user');
     userAllData.user = userOfResponse;
 
-    const addresses = await usersRepository.getAddressesByUser(Number(id));
+    const addresses = await addressesRepository.getAddressesByUser(Number(id));
 
     userAllData.addresses = addresses;
     return userAllData;
@@ -64,11 +55,7 @@ async function getUsersService(
 
 async function updateUserService(id: string, updateUserData: UpdateUserData) {
   if (!updateUserData.email || !updateUserData.password || !id)
-    throw errorFactory.unprocessableEntity([
-      'email inexistent or',
-      'id inexistent or',
-      'password inexistent'
-    ]);
+    throw errorFactory.unprocessableEntity(['email inexistent or', 'id inexistent or', 'password inexistent']);
 
   const user = await usersRepository.getUserByEmail(updateUserData.email);
   if (user) throw errorFactory.conflict('user existent');
