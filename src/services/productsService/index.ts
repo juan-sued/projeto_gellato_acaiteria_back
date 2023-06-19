@@ -1,8 +1,7 @@
-import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
+import { ProductBasic, ProductOfertDay, UpdateOfertDayData, UpdateProductData } from '@/interfaces/productsInterfaces';
 import { productsRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
-import { addresses, products } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import { ofertsDay, products } from '@prisma/client';
 
 const productExample: ProductBasic = {
   id: 1,
@@ -10,14 +9,18 @@ const productExample: ProductBasic = {
   image: 'http://asdasdasd',
 };
 
-async function getAllProducts(name: string, id: string): Promise<ProductBasic[]> {
+async function insertProduct(newProduct: products) {
+  await productsRepository.insertProduct(newProduct);
+}
+
+async function getAllProducts(): Promise<ProductBasic[]> {
   const products = await productsRepository.getAllProducts();
   if (!products) throw errorFactory.notFound('product');
 
   return products;
 }
 
-async function getProductsByName(name: string, id: string): Promise<ProductBasic[]> {
+async function getProductsByName(name: string): Promise<ProductBasic[]> {
   const products: ProductBasic[] = await productsRepository.getProductsByFilterName(name);
 
   if (!products) throw errorFactory.notFound('product');
@@ -25,14 +28,14 @@ async function getProductsByName(name: string, id: string): Promise<ProductBasic
   return products;
 }
 
-async function getProductById(name: string, id: string): Promise<products> {
+async function getProductById(id: string): Promise<products> {
   const product: products = await productsRepository.getProductById(Number(id));
   if (!product) throw errorFactory.notFound('product');
 
   return product;
 }
 
-async function updateProductService(id: string, updateProductData: UpdateProductData) {
+async function updateProduct(id: string, updateProductData: UpdateProductData) {
   if (!updateProductData) throw errorFactory.unprocessableEntity(['data inexistent']);
 
   await productsRepository.updateProduct(Number(id), updateProductData);
@@ -40,9 +43,56 @@ async function updateProductService(id: string, updateProductData: UpdateProduct
   return;
 }
 
-async function deleteProductService(id: string) {
+async function deleteProduct(id: string) {
   if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
   await productsRepository.deleteProduct(Number(id));
 }
 
-export { updateProductService, deleteProductService };
+async function getAllOfertsDay(): Promise<ProductOfertDay[]> {
+  const products = await productsRepository.getAllOfertsDay();
+  if (!products) throw errorFactory.notFound('product');
+
+  return products;
+}
+
+async function getOfertsDayByName(name: string): Promise<ProductOfertDay[]> {
+  const products: ProductOfertDay[] = await productsRepository.getOfertDaysByFilterName(name);
+
+  if (!products) throw errorFactory.notFound('product');
+
+  return products;
+}
+
+async function getOfertsDayById(id: string): Promise<ofertsDay> {
+  const product: ofertsDay = await productsRepository.getOfertDayById(Number(id));
+  if (!product) throw errorFactory.notFound('product');
+
+  return product;
+}
+
+async function updateOfertsDay(id: string, updateOfertsDayData: UpdateOfertDayData) {
+  if (!updateOfertsDayData) throw errorFactory.unprocessableEntity(['data inexistent']);
+
+  await productsRepository.updateOfertDay(Number(id), updateOfertsDayData);
+
+  return;
+}
+
+async function deleteOfertsDay(id: string) {
+  if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
+  await productsRepository.deleteOfertDay(Number(id));
+}
+
+export {
+  deleteProduct,
+  updateProduct,
+  getProductsByName,
+  getProductById,
+  getAllProducts,
+  getAllOfertsDay,
+  deleteOfertsDay,
+  updateOfertsDay,
+  getOfertsDayById,
+  getOfertsDayByName,
+  insertProduct,
+};

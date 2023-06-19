@@ -1,18 +1,14 @@
 import { addresses, Prisma, users } from '@prisma/client';
 import { prisma } from '@/databases/postgreSQL';
 import { ISign } from '@/interfaces/authInterfaces';
-import {
-  UpdateAddressData,
-  UpdateUserData,
-  UsersBasic
-} from '@/interfaces/userInterfaces ';
+import { UpdateAddressData, UpdateUserData, UsersBasic } from '@/interfaces/userInterfaces ';
 
 //=================== GET =====================//
 function getUserByEmail(email: string) {
   const params: Prisma.usersFindUniqueArgs = {
     where: {
-      email
-    }
+      email,
+    },
   };
 
   return prisma.users.findUnique(params);
@@ -21,7 +17,7 @@ function getUserByEmail(email: string) {
 function getUserById(id: number) {
   const params: Prisma.usersFindUniqueArgs = {
     where: {
-      id
+      id,
     },
     select: {
       id: true,
@@ -31,8 +27,8 @@ function getUserById(id: number) {
       cpf: true,
       createdAt: true,
       updatedAt: true,
-      isAdministrator: true
-    }
+      isAdministrator: true,
+    },
   };
   return prisma.users.findUnique(params);
 }
@@ -40,8 +36,8 @@ function getUserById(id: number) {
 function getAddressesByUser(id: number): Promise<addresses[]> {
   const params: Prisma.addressesFindManyArgs = {
     where: {
-      id
-    }
+      id,
+    },
   };
 
   return prisma.addresses.findMany(params);
@@ -53,8 +49,8 @@ function getAllUsers(): Promise<UsersBasic[]> {
     select: {
       id: true,
       name: true,
-      phone: true
-    }
+      phone: true,
+    },
   };
   return prisma.users.findMany(params);
 }
@@ -64,12 +60,12 @@ function getUsersByFilterName(name: string): Promise<UsersBasic[]> {
     where: {
       name: {
         startsWith: `${name}`,
-        mode: 'insensitive'
+        mode: 'insensitive',
       },
-      isAdministrator: false
+      isAdministrator: false,
     },
     skip: 0,
-    take: 5
+    take: 5,
   };
 
   return prisma.users.findMany(params);
@@ -77,12 +73,20 @@ function getUsersByFilterName(name: string): Promise<UsersBasic[]> {
 
 //================= INSERT ===================//
 
-async function insertUser(newUser: ISign) {
-  delete newUser.confirmPassword;
-
-  const result = await prisma.users.create({ data: newUser });
-  if (!result) throw { type: 'error' };
-  return result;
+async function insertAddress(newAddress: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>) {
+  return await prisma.addresses.create({
+    data: {
+      street: newAddress.street,
+      number: newAddress.number,
+      city: newAddress.city,
+      state: newAddress.state,
+      neighborhood: newAddress.neighborhood,
+      cep: newAddress.cep,
+      user: {
+        connect: { id: newAddress.userId },
+      },
+    },
+  });
 }
 
 //================= UPDATE ===================//
@@ -90,7 +94,7 @@ async function insertUser(newUser: ISign) {
 async function updateUser(id: number, updateUserData: UpdateUserData) {
   const resultUsers = await prisma.users.update({
     where: { id: id },
-    data: updateUserData
+    data: updateUserData,
   });
 
   if (!resultUsers) throw { type: 'error' };
@@ -104,12 +108,12 @@ async function deleteUser(id: number) {
 
 export {
   getUserByEmail,
-  insertUser,
+  insertAddress,
   getUserById,
   getAllUsers,
   getUsersByFilterName,
   getAddressesByUser,
   updateUser,
   updateAddress,
-  deleteUser
+  deleteUser,
 };

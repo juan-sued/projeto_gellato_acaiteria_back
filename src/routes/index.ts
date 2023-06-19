@@ -1,11 +1,5 @@
-import { Router } from 'express';
-import { authRouter } from './authRoutes';
-import { favoritedsRouter } from './favoritedsRoutes';
-import { usersRouter } from './usersRoutes';
-import { homeContentRouter } from './homeRoutes';
-
-const router = Router();
-
-router.use([authRouter, favoritedsRouter, usersRouter, homeContentRouter]);
-
-export default router;
+export * from './authRoutes';
+export * from './favoritedsRoutes';
+export * from './homeRoutes';
+export * from './productsRoutes';
+export * from './usersRoutes';
