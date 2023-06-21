@@ -13,6 +13,7 @@ function getAllProducts(): Promise<ProductBasic[]> {
       image: true,
     },
   };
+
   return prisma.products.findMany(params);
 }
 async function getProductById(id: number): Promise<products> {
@@ -111,6 +112,7 @@ async function updateOfertDay(id: number, updateOfertDayData: UpdateOfertDayData
 
   await prisma.ofertsDay.update(params);
 }
+//================= DELETE ===================//
 
 async function deleteProduct(id: number) {
   await prisma.products.delete({ where: { id } });

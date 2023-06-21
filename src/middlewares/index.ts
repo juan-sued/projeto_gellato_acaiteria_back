@@ -1,4 +1,4 @@
-export * from "./validateSchemaMiddleware";
-export * from "./errorHelperMiddleware";
-export * from "./validateJwtTokenMiddleware";
-
+export * from './authMiddleware';
+export * from './errorsMiddleware';
+export * as productsMiddleware from './productsMiddleware';
+export * from './schemaMiddleware';

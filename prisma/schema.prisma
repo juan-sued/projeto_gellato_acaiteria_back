@@ -85,7 +85,7 @@ model orders {
 
 model products {
   id               Int     @id @default(autoincrement())
-  title            String  @unique @db.VarChar(150)
+  title            String  @db.VarChar(150)
   image            String  @db.VarChar(100)
   price            Decimal @db.Decimal()
   description      String  @db.VarChar(70)

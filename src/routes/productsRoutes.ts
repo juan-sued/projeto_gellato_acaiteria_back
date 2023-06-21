@@ -1,16 +1,18 @@
 import { Router } from 'express';
 
-import validateJwtTokenMiddleware from '@/middlewares/validateJwtTokenMiddleware';
-import { productsController } from '@/controllers';
+import { validateNotFoundProductMiddleware, validateConflictProductMiddleware } from '@/middlewares/productsMiddleware';
+import { validateJwtTokenMiddleware, validateSchemaMiddleware } from '@/middlewares';
+import { deleteProduct, getProducts, insertProduct, updateProduct } from '@/controllers/productsController';
+import { productSchemas } from '@/schemas';
 
 const productsRouter = Router();
 
 productsRouter
   .all('/*', validateJwtTokenMiddleware)
-  .post('/', productsController.insertProduct)
-  .get('/', productsController.getProducts)
-  .get('/:id', productsController.getProducts)
-  .patch('/', productsController.updateProduct)
-  .delete('/', productsController.deleteProduct);
+  .post('/', validateSchemaMiddleware(productSchemas.productSchemas), validateConflictProductMiddleware, insertProduct)
+  .get('/', getProducts)
+  .get('/:id', validateNotFoundProductMiddleware, getProducts)
+  .patch('/:id', validateNotFoundProductMiddleware, updateProduct)
+  .delete('/:id', validateNotFoundProductMiddleware, deleteProduct);
 
 export { productsRouter };

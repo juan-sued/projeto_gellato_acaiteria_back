@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import validateJwtTokenMiddleware from '@/middlewares/validateJwtTokenMiddleware';
 import { getAddresses, insertAddress } from '@/controllers/addressesController';
+import { validateJwtTokenMiddleware } from '@/middlewares';
 
 const addressesRouter = Router();
 

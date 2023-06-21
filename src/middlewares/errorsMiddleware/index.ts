@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-export function errorHandlerMiddleware(error: ErrorEvent, _req: Request, res: Response, _next: NextFunction) {
+function errorHandlerMiddleware(error: ErrorEvent, _req: Request, res: Response, _next: NextFunction) {
   switch (error.type) {
     case 'error_unprocessable_entity':
       return res.status(422).send({ message: error.message });
@@ -16,3 +16,5 @@ export function errorHandlerMiddleware(error: ErrorEvent, _req: Request, res: Re
       res.status(500).send({ message: error.message });
   }
 }
+
+export { errorHandlerMiddleware };

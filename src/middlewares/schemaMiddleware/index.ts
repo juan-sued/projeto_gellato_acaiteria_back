@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import { Schema } from 'joi';
 import { errorFactory } from '@/utils';
 
-export const validateSchemaMiddleware = (schema: Schema) => {
+const validateSchemaMiddleware = (schema: Schema) => {
   return (request: Request, response: Response, next: NextFunction) => {
     const body: object = request.body;
     const { error } = schema.validate(body, { abortEarly: false });
 
     if (error !== undefined) {
-      const messages: string[] = error?.details.map(detail => detail.message);
+      const messages: string[] = error?.details.map((detail) => detail.message);
 
       throw errorFactory.unprocessableEntity(messages);
     }
@@ -16,3 +16,5 @@ export const validateSchemaMiddleware = (schema: Schema) => {
     next();
   };
 };
+
+export { validateSchemaMiddleware };

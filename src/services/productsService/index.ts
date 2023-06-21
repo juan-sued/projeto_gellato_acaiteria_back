@@ -44,7 +44,6 @@ async function updateProduct(id: string, updateProductData: UpdateProductData) {
 }
 
 async function deleteProduct(id: string) {
-  if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
   await productsRepository.deleteProduct(Number(id));
 }
 

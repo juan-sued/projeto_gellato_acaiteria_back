@@ -14,7 +14,6 @@ export async function getProducts(request: Request, response: Response) {
   const { name } = request.query as Record<string, string>;
   const { id } = request.params;
   let result: ProductBasic[] | products = [];
-
   if (name) result = await productsService.getProductsByName(name);
 
   if (id) result = await productsService.getProductById(id);
@@ -33,9 +32,9 @@ export async function updateProduct(request: Request, response: Response) {
 }
 
 export async function deleteProduct(request: Request, response: Response) {
-  const { idProduct } = response.locals;
-
-  await productsService.deleteProduct(idProduct);
+  const { id } = request.params;
+  console.log('entrou');
+  await productsService.deleteProduct(id);
 
   response.sendStatus(200);
 }
