@@ -1,4 +1,5 @@
-export * from './authMiddleware';
-export * from './errorsMiddleware';
-export * as productsMiddleware from './productsMiddleware';
-export * from './schemaMiddleware';
+export * from './auth';
+export * from './errors';
+export * as productsMiddleware from './products';
+export * from './schema';
+export * from './shared';

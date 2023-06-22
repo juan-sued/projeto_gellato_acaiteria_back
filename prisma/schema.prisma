@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -21,14 +18,12 @@ model users {
   updatedAt       DateTime @updatedAt
   isAdministrator Boolean  @default(false) @db.Boolean()
 
-  favoriteds favoriteds[]
-  feedbacks  feedbacks[]
-  orders     orders[]
-  addresses  addresses[]
-  customizedProducts customizedProducts[]
-
+  ofertsOfDay ofertsOfDay[]
+  favoriteds  favoriteds[]
+  feedbacks   feedbacks[]
+  orders      orders[]
+  addresses   addresses[]
 }
-
 
 model addresses {
   id              Int      @id @default(autoincrement())
@@ -54,13 +49,12 @@ model feedbacks {
   user users @relation(fields: [userId], references: [id])
 }
 
-
-
 model categories {
-  id          Int        @id @default(autoincrement())
-  categories  String     @unique @db.VarChar(50)
-  description String     @unique @db.VarChar(100)
-  product     products[]
+  id          Int     @id @default(autoincrement())
+  name    String  @unique @db.VarChar(50)
+  description String   @db.VarChar(100)
+  stock       stock[]
+
 }
 
 model favoriteds {
@@ -74,57 +68,69 @@ model favoriteds {
 model orders {
   id          Int       @id @default(autoincrement())
   userId      Int       @db.SmallInt()
-  productId   Int       @db.SmallInt()
+  total       Decimal
+  subTotal    Decimal
+  status      String    @default("Pendente")
+
   createdAt   DateTime  @default(now())
   isDelivered DateTime? @db.Timestamp()
-  user        users     @relation(fields: [userId], references: [id])
-  product     products  @relation(fields: [productId], references: [id])
+
+  user     users            @relation(fields: [userId], references: [id])
+  products order_products[]
 }
 
 
+model ofertsOfDay {
+  id          Int     @id @default(autoincrement())
+  userId      Int     @unique @db.Integer
+  productId   Int     @db.Integer
+  description String  @unique
+  price_ofert Decimal
+
+  user    users    @relation(fields: [userId], references: [id])
+  product products @relation(fields: [productId], references: [id])
+}
+
+model stock_products {
+  id        Int      @id @default(autoincrement())
+  stockId   Int      @db.Integer
+  productId Int      @db.Integer
+  stock     stock    @relation(fields: [stockId], references: [id])
+  product   products @relation(fields: [productId], references: [id])
+}
 
 model products {
-  id               Int     @id @default(autoincrement())
-  title            String  @db.VarChar(150)
-  image            String  @db.VarChar(100)
-  price            Decimal @db.Decimal()
-  description      String  @db.VarChar(70)
-  categoryId       Int     @db.SmallInt()
-  unitOfMeasure    String  @db.VarChar(20)
-  amount           Int     @db.Integer()
-  quantityForUnity Decimal @db.Decimal()
-
-  favoriteds favoriteds[]
-  categories categories   @relation(fields: [categoryId], references: [id])
-  orders     orders[]
-  ofertsDay  ofertsDay[]
-
-  customizedProducts customizedProducts_products[]
+  id            Int              @id @default(autoincrement())
+  name          String
+  image         String
+  price         Decimal
+  cupSizeId     Int?
+  stock         stock_products[]
+  orderProducts order_products[]
+  favoriteds    favoriteds[]
+  ofertsOfDay   ofertsOfDay[]
 }
 
-model ofertsDay {
-  id          Int      @id @default(autoincrement())
-  productId   Int      @db.SmallInt()
-  description String   @unique @db.VarChar(100)
-  priceOfert  Decimal  @db.Decimal()
-  product     products @relation(fields: [productId], references: [id])
+model order_products {
+  id        Int      @id @default(autoincrement())
+  orderId   Int      @db.Integer
+  productId Int      @db.Integer
+  quantity  Int
+  orders    orders   @relation(fields: [orderId], references: [id])
+  product   products @relation(fields: [productId], references: [id])
 }
 
-model customizedProducts_products {
-  id                  Int                @id @default(autoincrement())
-  productCustomizedId Int
-  productId           Int
-  productCustomized   customizedProducts @relation(fields: [productCustomizedId], references: [id])
-  product             products           @relation(fields: [productId], references: [id])
-}
+model stock {
+  id                 Int     @id @default(autoincrement())
+  title              String  @unique
+  image              String
+  price              Decimal
+  description        String
+  categoryId         Int     @db.Integer
+  unit_of_measure    String
+  amount             Int
+  quantity_for_unity Decimal
 
-model customizedProducts {
-  id        Int                           @id @default(autoincrement())
-  name      String
-  image     String
-  price     Float
-  cupsizeId  Int
-  authorId Int 
-  products  customizedProducts_products[]
-  author users @relation(fields: [authorId], references: [id])
+  category       categories       @relation(fields: [categoryId], references: [id])
+  stock_products stock_products[]
 }

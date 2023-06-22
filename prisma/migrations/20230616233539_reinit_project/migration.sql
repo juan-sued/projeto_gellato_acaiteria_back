@@ -50,7 +50,7 @@ DROP TABLE "historic";
 DROP TABLE "stock";
 
 -- CreateTable
-CREATE TABLE "ofertsDay" (
+CREATE TABLE "ofertsOfDay" (
     "id" SERIAL NOT NULL,
     "productId" SMALLINT NOT NULL,
     "description" VARCHAR(100) NOT NULL,
@@ -80,13 +80,13 @@ CREATE TABLE "customizedProducts" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ofertsDay_description_key" ON "ofertsDay"("description");
+CREATE UNIQUE INDEX "ofertsDay_description_key" ON "ofertsOfDay"("description");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "categories_categories_key" ON "categories"("categories");
 
 -- AddForeignKey
-ALTER TABLE "ofertsDay" ADD CONSTRAINT "ofertsDay_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ofertsOfDay" ADD CONSTRAINT "ofertsDay_productId_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "customizedProducts_products" ADD CONSTRAINT "customizedProducts_products_productCustomizedId_fkey" FOREIGN KEY ("productCustomizedId") REFERENCES "customizedProducts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

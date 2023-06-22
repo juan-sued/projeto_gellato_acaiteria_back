@@ -1,7 +1,7 @@
 import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
 import { productsRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
-import { products } from '@prisma/client';
+import { ofertsOfDay, products } from '@prisma/client';
 
 async function insertProduct(newProduct: products) {
   await productsRepository.insertProduct(newProduct);

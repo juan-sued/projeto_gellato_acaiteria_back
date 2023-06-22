@@ -1,5 +1,6 @@
-export * as usersRepository from './usersRepository';
-export * as homeRepository from './homeRepository';
-export * as favoritedsRepository from './favoritedsRepository';
-export * as productsRepository from './productsRepository';
-export * as addressesRepository from './addressesRepository';
+export * as usersRepository from './users/usersRepository';
+export * as favoritedsRepository from './products/favoritedsRepository';
+export * as productsRepository from './products/productsRepository';
+export * as addressesRepository from './users/addressesRepository';
+export * as stockRepository from './stock/stockRepository';
+export * as categoriesRepository from './categories/categoriesRepository';
