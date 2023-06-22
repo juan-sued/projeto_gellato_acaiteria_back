@@ -5,10 +5,10 @@ export const signUpSchema = Joi.object({
   email: Joi.string().email().trim().required().min(1),
   password: Joi.string().trim().required().min(1),
   confirmPassword: Joi.ref('password'),
-  isAdministrator: Joi.boolean()
+  typeOfUser: Joi.number().min(0),
 });
 
 export const signInSchema = Joi.object({
   email: Joi.string().email().trim().required().min(1),
-  password: Joi.string().trim().required().min(1)
+  password: Joi.string().trim().required().min(1),
 });

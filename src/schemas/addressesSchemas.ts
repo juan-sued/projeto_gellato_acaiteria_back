@@ -1,7 +1,6 @@
 import Joi from 'joi';
 
 const postAddressSchema = Joi.object({
-  userId: Joi.number().integer().required(),
   cep: Joi.string().required(),
   street: Joi.string().required(),
   city: Joi.string().required(),

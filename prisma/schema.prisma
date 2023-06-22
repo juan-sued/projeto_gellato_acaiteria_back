@@ -8,21 +8,33 @@ datasource db {
 }
 
 model users {
-  id              Int      @id @default(autoincrement())
-  name            String   @db.VarChar(255)
-  email           String   @unique @db.VarChar(100)
-  phone           String?  @db.VarChar(12)
-  cpf             String?  @unique @db.VarChar(11)
-  password        String   @db.Text()
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  isAdministrator Boolean  @default(false) @db.Boolean()
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(255)
+  email        String        @unique @db.VarChar(100)
+  phone        String?       @db.VarChar(12)
+  cpf          String?       @unique @db.VarChar(11)
+  password     String        @db.Text()
+typeOfUserId Int @db.SmallInt() @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  ofertsOfDay  ofertsOfDay[]
+  favoriteds   favoriteds[]
+  feedbacks    feedbacks[]
+  orders       orders[]
+  addresses    addresses[]
+  typeOfUser   typesOfUsers  @relation(fields: [typeOfUserId], references: [id])
 
-  ofertsOfDay ofertsOfDay[]
-  favoriteds  favoriteds[]
-  feedbacks   feedbacks[]
-  orders      orders[]
-  addresses   addresses[]
+}
+
+model typesOfUsers {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.Char(100)
+  access      String   @db.Char(200)
+  description String   @db.Char(200)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user users[]
 }
 
 model addresses {
@@ -51,8 +63,8 @@ model feedbacks {
 
 model categories {
   id          Int     @id @default(autoincrement())
-  name    String  @unique @db.VarChar(50)
-  description String   @db.VarChar(100)
+  name        String  @unique @db.VarChar(50)
+  description String  @db.VarChar(100)
   stock       stock[]
 
 }
@@ -66,11 +78,11 @@ model favoriteds {
 }
 
 model orders {
-  id          Int       @id @default(autoincrement())
-  userId      Int       @db.SmallInt()
-  total       Decimal
-  subTotal    Decimal
-  status      String    @default("Pendente")
+  id       Int     @id @default(autoincrement())
+  userId   Int     @db.SmallInt()
+  total    Decimal
+  subTotal Decimal
+  status   String  @default("Pendente")
 
   createdAt   DateTime  @default(now())
   isDelivered DateTime? @db.Timestamp()
@@ -79,12 +91,12 @@ model orders {
   products order_products[]
 }
 
-
 model ofertsOfDay {
-  id          Int     @id @default(autoincrement())
-  userId      Int     @unique @db.Integer
-  productId   Int     @db.Integer
-  description String  @unique
+  id          Int    @id @default(autoincrement())
+  userId      Int    @unique @db.Integer
+  productId   Int    @db.Integer
+  description String @db.VarChar(200)
+
   price_ofert Decimal
 
   user    users    @relation(fields: [userId], references: [id])
@@ -125,7 +137,7 @@ model stock {
   title              String  @unique
   image              String
   price              Decimal
-  description        String
+  description        String  @db.Text()
   categoryId         Int     @db.Integer
   unit_of_measure    String
   amount             Int

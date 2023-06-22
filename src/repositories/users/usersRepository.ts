@@ -1,8 +1,9 @@
 import { addresses, Prisma, users } from '@prisma/client';
 import { prisma } from '@/databases/postgreSQL';
-import { ISign } from '@/interfaces/authInterfaces';
+import { ISign, ISignUp } from '@/interfaces/authInterfaces';
 import { UpdateAddressData, UpdateUserData, UsersBasic } from '@/interfaces/userInterfaces ';
 import { errorFactory } from '@/utils';
+import { exclude } from '@/utils/prisma-utils';
 
 //=================== GET =====================//
 function getUserByEmail(email: string) {
@@ -15,40 +16,43 @@ function getUserByEmail(email: string) {
   return prisma.users.findUnique(params);
 }
 
-function getUserById(id: number) {
-  const params: Prisma.usersFindUniqueArgs = {
+async function getUserOrAdministratorById(id: number): Promise<users> {
+  const user = await prisma.users.findUnique({
     where: {
       id,
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      phone: true,
-      cpf: true,
-      createdAt: true,
-      updatedAt: true,
-      isAdministrator: true,
-    },
-  };
-  return prisma.users.findUnique(params);
-}
 
-function getAllUsers(): Promise<UsersBasic[]> {
-  const params: Prisma.usersFindManyArgs = {
-    where: { isAdministrator: false },
+    include: {
+      typeOfUser: true,
+      addresses: true,
+    },
+  });
+
+  delete user['password'];
+  delete user['typeOfUserId'];
+
+  return user;
+}
+async function getAllUsers(): Promise<UsersBasic[]> {
+  const users = await prisma.users.findMany({
+    where: {
+      typeOfUserId: 0,
+    },
     select: {
       id: true,
       name: true,
       phone: true,
     },
-  };
-  return prisma.users.findMany(params);
+  });
+
+  return users;
 }
 
 function getAllAdministrators(): Promise<UsersBasic[]> {
   const params: Prisma.usersFindManyArgs = {
-    where: { isAdministrator: true },
+    where: {
+      typeOfUserId: 1,
+    },
     select: {
       id: true,
       name: true,
@@ -65,10 +69,10 @@ function getUsersByFilterName(name: string): Promise<UsersBasic[]> {
         startsWith: `${name}`,
         mode: 'insensitive',
       },
-      isAdministrator: false,
+      typeOfUserId: 0,
     },
     skip: 0,
-    take: 5,
+    take: undefined,
   };
 
   return prisma.users.findMany(params);
@@ -81,7 +85,7 @@ function getAdministratorsByFilterName(name: string): Promise<UsersBasic[]> {
         startsWith: `${name}`,
         mode: 'insensitive',
       },
-      isAdministrator: true,
+      typeOfUserId: 1,
     },
     select: {
       id: true,
@@ -89,17 +93,16 @@ function getAdministratorsByFilterName(name: string): Promise<UsersBasic[]> {
       phone: true,
     },
     skip: 0,
-    take: 5,
+    take: undefined,
   });
 }
 
 //================= INSERT ===================//
 
-async function insertUser(newUser: ISign) {
+async function insertUser(newUser: ISignUp) {
   delete newUser.confirmPassword;
 
   const result = await prisma.users.create({ data: newUser });
-  if (!result) throw { type: 'error' };
   return result;
 }
 
@@ -121,7 +124,7 @@ async function deleteUser(id: number) {
 export {
   getUserByEmail,
   insertUser,
-  getUserById,
+  getUserOrAdministratorById,
   getAllUsers,
   getUsersByFilterName,
   getAllAdministrators,
