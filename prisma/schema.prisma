@@ -52,7 +52,7 @@ model feedbacks {
 model categories {
   id          Int     @id @default(autoincrement())
   name    String  @unique @db.VarChar(50)
-  description String  @unique @db.VarChar(100)
+  description String   @db.VarChar(100)
   stock       stock[]
 
 }
@@ -70,13 +70,15 @@ model orders {
   userId      Int       @db.SmallInt()
   total       Decimal
   subTotal    Decimal
-  status      String
+  status      String    @default("Pendente")
+
   createdAt   DateTime  @default(now())
   isDelivered DateTime? @db.Timestamp()
 
   user     users            @relation(fields: [userId], references: [id])
   products order_products[]
 }
+
 
 model ofertsOfDay {
   id          Int     @id @default(autoincrement())

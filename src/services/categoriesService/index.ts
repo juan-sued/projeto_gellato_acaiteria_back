@@ -1,3 +1,4 @@
+import { categoriesRepository } from '@/repositories';
 import { UpdateCategoriesData } from '@/interfaces/categoriesInterfaces';
 import { errorFactory } from '@/utils';
 import { categories } from '@prisma/client';
@@ -29,8 +30,6 @@ async function getCategoriesById(id: string): Promise<categories> {
 }
 
 async function updateCategories(id: string, updateCategoriesData: UpdateCategoriesData) {
-  if (!updateCategoriesData) throw errorFactory.unprocessableEntity(['data inexistent']);
-
   await categoriesRepository.updateCategories(Number(id), updateCategoriesData);
 
   return;

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { errorFactory } from '@/utils';
+import { categoriesRepository } from '@/repositories';
 
 const validateConflictCategoriesMiddleware = async (request: Request, response: Response, next: NextFunction) => {
   const { name } = request.body;
