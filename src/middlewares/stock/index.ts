@@ -16,9 +16,9 @@ const validateConflictStockMiddleware = async (request: Request, response: Respo
   next();
 };
 const validateNotFoundStockMiddleware = async (request: Request, response: Response, next: NextFunction) => {
-  const { id } = request.params;
+  const { idParams } = response.locals;
 
-  const isRegisteredStock = await stockRepository.getStockById(Number(id));
+  const isRegisteredStock = await stockRepository.getStockById(idParams);
 
   if (!isRegisteredStock) throw errorFactory.notFound('Stock');
 

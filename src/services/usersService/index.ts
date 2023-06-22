@@ -4,7 +4,7 @@ import { errorFactory } from '@/utils';
 import { addresses } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
-async function getUsersService(name: string, id: string): Promise<ResponseUsers | responseDataUser> {
+async function getUsersService(name: string, id: number): Promise<ResponseUsers | responseDataUser> {
   const userList: UsersBasic[] = [];
   const administratorsList: UsersBasic[] = [];
 
@@ -32,11 +32,11 @@ async function getUsersService(name: string, id: string): Promise<ResponseUsers 
 
     usersListResponse.administrators = allAdministrators;
   } else if (!!id) {
-    const userOfResponse = await usersRepository.getUserById(Number(id));
+    const userOfResponse = await usersRepository.getUserById(id);
     if (!userOfResponse) throw errorFactory.notFound('user');
     userAllData.user = userOfResponse;
 
-    const addresses = await addressesRepository.getAddressesByUser(Number(id));
+    const addresses = await addressesRepository.getAddressesByUser(id);
 
     userAllData.addresses = addresses;
     return userAllData;
@@ -53,24 +53,20 @@ async function getUsersService(name: string, id: string): Promise<ResponseUsers 
   return usersListResponse;
 }
 
-async function updateUserService(id: string, updateUserData: UpdateUserData) {
-  if (!updateUserData.email || !updateUserData.password || !id)
-    throw errorFactory.unprocessableEntity(['email inexistent or', 'id inexistent or', 'password inexistent']);
+async function updateUserService(id: number, updateUserData: UpdateUserData) {
+  if (updateUserData.password) {
+    const passwordCripted = await bcrypt.hash(updateUserData.password, 10);
+    updateUserData.password = passwordCripted;
+  }
 
-  const user = await usersRepository.getUserByEmail(updateUserData.email);
-  if (user) throw errorFactory.conflict('user existent');
-
-  const passwordCripted = await bcrypt.hash(updateUserData.password, 10);
-  updateUserData.password = passwordCripted;
-
-  await usersRepository.updateUser(Number(id), updateUserData);
+  await usersRepository.updateUser(id, updateUserData);
 
   return;
 }
 
-async function deleteUserService(id: string) {
+async function deleteUserService(id: number) {
   if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
-  await usersRepository.deleteUser(Number(id));
+  await usersRepository.deleteUser(id);
 }
 
 export { getUsersService, updateUserService, deleteUserService };

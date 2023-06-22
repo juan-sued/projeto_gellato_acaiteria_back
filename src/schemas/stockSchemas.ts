@@ -11,4 +11,15 @@ const stockSchema = Joi.object({
   quantity_for_unity: Joi.number().required(),
 });
 
-export { stockSchema };
+const stockUpdateSchema = Joi.object({
+  title: Joi.string(),
+  image: Joi.string(),
+  price: Joi.number(),
+  description: Joi.string(),
+  categoryId: Joi.number(),
+  unit_of_measure: Joi.string(),
+  amount: Joi.number(),
+  quantity_for_unity: Joi.number(),
+});
+
+export { stockSchema, stockUpdateSchema };

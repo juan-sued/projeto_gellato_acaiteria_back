@@ -16,9 +16,9 @@ const validateConflictCategoriesMiddleware = async (request: Request, response: 
   next();
 };
 const validateNotFoundCategoriesMiddleware = async (request: Request, response: Response, next: NextFunction) => {
-  const { id } = request.params;
+  const { idParams } = response.locals;
 
-  const isRegisteredCategories = await categoriesRepository.getCategoriesById(Number(id));
+  const isRegisteredCategories = await categoriesRepository.getCategoriesById(idParams);
 
   if (!isRegisteredCategories) throw errorFactory.notFound('Categories');
 

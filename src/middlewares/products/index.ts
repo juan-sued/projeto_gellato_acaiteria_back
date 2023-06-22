@@ -16,9 +16,9 @@ const validateConflictProductMiddleware = async (request: Request, response: Res
   next();
 };
 const validateNotFoundProductMiddleware = async (request: Request, response: Response, next: NextFunction) => {
-  const { id } = request.params;
+  const { idParams } = response.locals;
 
-  const isRegisteredProduct = await productsRepository.getProductById(Number(id));
+  const isRegisteredProduct = await productsRepository.getProductById(idParams);
 
   if (!isRegisteredProduct) throw errorFactory.notFound('Product');
 

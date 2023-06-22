@@ -22,23 +22,23 @@ async function getProductsByName(name: string): Promise<ProductBasic[]> {
   return products;
 }
 
-async function getProductById(id: string): Promise<products> {
-  const product: products = await productsRepository.getProductById(Number(id));
+async function getProductById(id: number): Promise<products> {
+  const product: products = await productsRepository.getProductById(id);
   if (!product) throw errorFactory.notFound('product');
 
   return product;
 }
 
-async function updateProduct(id: string, updateProductData: UpdateProductData) {
+async function updateProduct(id: number, updateProductData: UpdateProductData) {
   if (!updateProductData) throw errorFactory.unprocessableEntity(['data inexistent']);
 
-  await productsRepository.updateProduct(Number(id), updateProductData);
+  await productsRepository.updateProduct(id, updateProductData);
 
   return;
 }
 
-async function deleteProduct(id: string) {
-  await productsRepository.deleteProduct(Number(id));
+async function deleteProduct(id: number) {
+  await productsRepository.deleteProduct(id);
 }
 
 export { deleteProduct, updateProduct, getProductsByName, getProductById, getAllProducts, insertProduct };

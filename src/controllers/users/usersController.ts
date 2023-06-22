@@ -3,14 +3,14 @@ import { deleteUserService, getUsersService, updateUserService } from '@/service
 
 // Routes Post in AuthController
 
-export async function getUsersController(request: Request, response: Response) {
+async function getUsersController(request: Request, response: Response) {
   const { name } = request.query as Record<string, string>;
-  const { id } = request.params;
-  const users = await getUsersService(name, id);
+  const { idParams } = response.locals;
+  const users = await getUsersService(name, idParams);
   response.status(200).send(users);
 }
 
-export async function updateUserController(request: Request, response: Response) {
+async function updateUserController(request: Request, response: Response) {
   const { idUser } = response.locals;
   const updateUserData = request.body;
   await updateUserService(idUser, updateUserData);
@@ -18,10 +18,12 @@ export async function updateUserController(request: Request, response: Response)
   response.sendStatus(200);
 }
 
-export async function deleteUserController(request: Request, response: Response) {
+async function deleteUserController(request: Request, response: Response) {
   const { idUser } = response.locals;
 
   await deleteUserService(idUser);
 
   response.sendStatus(200);
 }
+
+export { getUsersController, updateUserController, deleteUserController };

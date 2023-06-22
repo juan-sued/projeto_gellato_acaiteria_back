@@ -1,18 +1,24 @@
-import { stockSchema } from '@/schemas';
+import { stockSchemas } from '@/schemas';
 import { Router } from 'express';
 
-import { validateJwtTokenMiddleware, validateSchemaMiddleware } from '@/middlewares';
-import { getStocks, insertStock } from '@/controllers/stock/stockController';
-import { validateConflictStockMiddleware } from '@/middlewares/stock';
+import { validateIdParamsMiddleware, validateJwtTokenMiddleware, validateSchemaMiddleware } from '@/middlewares';
+import { deleteStock, getStock, insertStock, updateStock } from '@/controllers/stock/stockController';
+import { validateConflictStockMiddleware, validateNotFoundStockMiddleware } from '@/middlewares/stock';
 
 const stockRouter = Router();
 
 stockRouter
-  .get('/', getStocks)
+  .get('/', getStock)
   .all('/*', validateJwtTokenMiddleware)
-  .post('/', validateSchemaMiddleware(stockSchema.stockSchema), validateConflictStockMiddleware, insertStock);
-// .get('/:id', validateIdParamsMiddleware, validateNotFoundStockMiddleware, getStock)
-// .patch('/:id', validateIdParamsMiddleware, validateNotFoundStockMiddleware, updateStock)
-// .delete('/:id', validateIdParamsMiddleware, validateNotFoundStockMiddleware, deleteStock);
+  .post('/', validateSchemaMiddleware(stockSchemas.stockSchema), validateConflictStockMiddleware, insertStock)
+  .get('/:id', validateIdParamsMiddleware, validateNotFoundStockMiddleware, getStock)
+  .patch(
+    '/:id',
+    validateIdParamsMiddleware,
+    validateSchemaMiddleware(stockSchemas.stockUpdateSchema),
+    validateNotFoundStockMiddleware,
+    updateStock,
+  )
+  .delete('/:id', validateIdParamsMiddleware, validateNotFoundStockMiddleware, deleteStock);
 
 export { stockRouter };

@@ -12,7 +12,7 @@ export async function insertProduct(request: Request, response: Response) {
 
 export async function getProducts(request: Request, response: Response) {
   const { name } = request.query as Record<string, string>;
-  const { id } = request.params;
+  const { idParams } = response.locals;
   let result: ProductBasic[] | products = [];
   if (name) result = await productsService.getProductsByName(name);
 
@@ -42,7 +42,7 @@ export async function updateProduct(req: Request, res: Response) {
 }
 
 export async function deleteProduct(request: Request, response: Response) {
-  const { id } = request.params;
+  const { idParams } = response.locals;
   console.log('entrou');
   await productsService.deleteProduct(id);
 

@@ -26,24 +26,24 @@ async function getAllAddresses(id: number): Promise<addresses[]> {
   return addresses;
 }
 
-async function getAddressById(id: string): Promise<addresses> {
-  const address: addresses = await addressesRepository.getAddressById(Number(id));
+async function getAddressById(id: number): Promise<addresses> {
+  const address: addresses = await addressesRepository.getAddressById(id);
   if (!address) throw errorFactory.notFound('address');
 
   return address;
 }
 
-async function updateAddress(id: string, updateAddressData: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>) {
+async function updateAddress(id: number, updateAddressData: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>) {
   const result = await verifyExistingAddress(updateAddressData);
   if (!result) throw new Error('Endereço não encontrado');
 
-  const updatedAddress = await addressesRepository.updateAddress(Number(id), updateAddressData);
+  const updatedAddress = await addressesRepository.updateAddress(id, updateAddressData);
 
   return updateAddress;
 }
 
-async function deleteAddress(id: string) {
-  const addressDeleted = await addressesRepository.deleteAddress(Number(id));
+async function deleteAddress(id: number) {
+  const addressDeleted = await addressesRepository.deleteAddress(id);
 
   if (!addressDeleted) throw new Error('Erro ao deletar');
 }

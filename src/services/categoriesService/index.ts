@@ -22,21 +22,21 @@ async function getCategoriesByName(name: string): Promise<categories[]> {
   return categories;
 }
 
-async function getCategoriesById(id: string): Promise<categories> {
-  const categories: categories = await categoriesRepository.getCategoriesById(Number(id));
+async function getCategoriesById(id: number): Promise<categories> {
+  const categories: categories = await categoriesRepository.getCategoriesById(id);
   if (!categories) throw errorFactory.notFound('categories');
 
   return categories;
 }
 
-async function updateCategories(id: string, updateCategoriesData: UpdateCategoriesData) {
-  await categoriesRepository.updateCategories(Number(id), updateCategoriesData);
+async function updateCategories(id: number, updateCategoriesData: UpdateCategoriesData) {
+  await categoriesRepository.updateCategories(id, updateCategoriesData);
 
   return;
 }
 
-async function deleteCategories(id: string) {
-  await categoriesRepository.deleteCategories(Number(id));
+async function deleteCategories(id: number) {
+  await categoriesRepository.deleteCategories(id);
 }
 
 export {

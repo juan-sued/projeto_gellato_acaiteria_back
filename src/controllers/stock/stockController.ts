@@ -10,13 +10,13 @@ export async function insertStock(request: Request, response: Response) {
   response.sendStatus(201);
 }
 
-export async function getStocks(request: Request, response: Response) {
+export async function getStock(request: Request, response: Response) {
   const { name } = request.query as Record<string, string>;
   const { id } = request.params;
   let result: StockBasic[] | stock = [];
   if (name) result = await stockService.getStockByName(name);
 
-  if (id) result = await stockService.getStockById(id);
+  if (id) result = await stockService.getStockById(Number(id));
 
   if (!name && !id) result = await stockService.getAllStock();
 
@@ -24,10 +24,10 @@ export async function getStocks(request: Request, response: Response) {
 }
 
 export async function updateStock(req: Request, res: Response) {
-  const { id } = req.params;
+  const { idParams } = res.locals;
   const { title, image, price, description, categoryId, unitOfMeasure, amount, quantityForUnity } = req.body;
 
-  const updatedStock = await stockService.updateStock(id, {
+  const updatedStock = await stockService.updateStock(idParams, {
     title,
     image,
     price,
@@ -42,9 +42,8 @@ export async function updateStock(req: Request, res: Response) {
 }
 
 export async function deleteStock(request: Request, response: Response) {
-  const { id } = request.params;
-  console.log('entrou');
-  await stockService.deleteStock(id);
+  const { idParams } = response.locals;
+  await stockService.deleteStock(idParams);
 
   response.sendStatus(200);
 }

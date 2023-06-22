@@ -12,22 +12,23 @@ export async function insertProduct(request: Request, response: Response) {
 
 export async function getProducts(request: Request, response: Response) {
   const { name } = request.query as Record<string, string>;
-  const { id } = request.params;
+  const { idParams } = response.locals;
   let result: ProductBasic[] | products = [];
   if (name) result = await productsService.getProductsByName(name);
 
-  if (id) result = await productsService.getProductById(id);
+  if (idParams) result = await productsService.getProductById(idParams);
 
-  if (!name && !id) result = await productsService.getAllProducts();
+  if (!name && !idParams) result = await productsService.getAllProducts();
 
   response.status(200).send(result);
 }
 
 export async function updateProduct(req: Request, res: Response) {
-  const { id } = req.params;
+  const { idParams } = res.locals;
+
   const { title, image, price, description, categoryId, unitOfMeasure, amount, quantityForUnity } = req.body;
 
-  const updatedProduct = await productsService.updateProduct(id, {
+  const updatedProduct = await productsService.updateProduct(idParams, {
     title,
     image,
     price,
@@ -42,9 +43,8 @@ export async function updateProduct(req: Request, res: Response) {
 }
 
 export async function deleteProduct(request: Request, response: Response) {
-  const { id } = request.params;
-  console.log('entrou');
-  await productsService.deleteProduct(id);
+  const { idParams } = response.locals;
+  await productsService.deleteProduct(idParams);
 
   response.sendStatus(200);
 }
