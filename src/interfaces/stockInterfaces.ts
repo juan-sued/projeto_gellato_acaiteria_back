@@ -1,12 +1,12 @@
-import { products } from '@prisma/client';
+import { stock } from '@prisma/client';
 
-//==================== get all ==================
+//==================== stock ==================
 
-export type ProductBasic = Pick<products, 'id' | 'name' | 'image'>;
+export type StockBasic = Pick<stock, 'id' | 'title' | 'image'>;
 
 //================= update ====================
 
-export interface UpdateProductData {
+export interface UpdateStockData {
   id?: number;
   title?: string;
   image?: string;

@@ -11,7 +11,7 @@ import bcrypt from 'bcrypt';
 import { addresses } from '@prisma/client';
 
 async function createAddress(newAddress: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>): Promise<addresses> {
-  const result = await isDuplicateAddress(newAddress);
+  const result = await verifyExistingAddress(newAddress);
 
   if (result) throw errorFactory.conflict('address already exists');
   const createdAddress = await addressesRepository.insertAddress(newAddress);
@@ -33,29 +33,21 @@ async function getAddressById(id: string): Promise<addresses> {
   return address;
 }
 
-async function updateAddress(id: string, updateAddressData: UpdateAddressData) {
-  if (
-    !updateAddressData.cep ||
-    !updateAddressData.complement ||
-    !updateAddressData.neighborhood ||
-    !updateAddressData.addressDetail ||
-    !updateAddressData.number ||
-    !updateAddressData.street ||
-    !updateAddressData.state ||
-    !id
-  )
-    throw errorFactory.unprocessableEntity(['email inexistent or', 'id inexistent or', 'password inexistent']);
+async function updateAddress(id: string, updateAddressData: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>) {
+  const result = await verifyExistingAddress(updateAddressData);
+  if (!result) throw new Error('Endereço não encontrado');
 
-  await addressesRepository.updateAddress(Number(id), updateAddressData);
+  const updatedAddress = await addressesRepository.updateAddress(Number(id), updateAddressData);
 
-  return;
+  return updateAddress;
 }
 
-// async function deleteAddress(id: string) {
-//   if (!id) throw errorFactory.unprocessableEntity(['id inexistent']);
-//   await addressesRepository.deleteAddress(Number(id));
-// }
-async function isDuplicateAddress(newAddress: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>) {
+async function deleteAddress(id: string) {
+  const addressDeleted = await addressesRepository.deleteAddress(Number(id));
+
+  if (!addressDeleted) throw new Error('Erro ao deletar');
+}
+async function verifyExistingAddress(newAddress: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>) {
   const addresses = await addressesRepository.getAddressesByUser(newAddress.userId);
 
   return addresses.some((address) => {
@@ -69,4 +61,4 @@ async function isDuplicateAddress(newAddress: Omit<addresses, 'id' | 'createdAt'
     );
   });
 }
-export { getAllAddresses, createAddress, getAddressById, updateAddress };
+export { getAllAddresses, createAddress, getAddressById, updateAddress, deleteAddress };
