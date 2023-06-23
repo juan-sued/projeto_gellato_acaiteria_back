@@ -1,4 +1,5 @@
 import { products } from '@prisma/client';
+
 import { productsService } from '@/services';
 import { Request, Response } from 'express';
 import { ProductBasic } from '@/interfaces/productsInterfaces';

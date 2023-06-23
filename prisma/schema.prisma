@@ -14,7 +14,7 @@ model users {
   phone        String?       @db.VarChar(12)
   cpf          String?       @unique @db.VarChar(11)
   password     String        @db.Text()
-typeOfUserId Int @db.SmallInt() @default(0)
+  typeOfUserId Int           @default(0) @db.SmallInt()
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   ofertsOfDay  ofertsOfDay[]
@@ -24,17 +24,6 @@ typeOfUserId Int @db.SmallInt() @default(0)
   addresses    addresses[]
   typeOfUser   typesOfUsers  @relation(fields: [typeOfUserId], references: [id])
 
-}
-
-model typesOfUsers {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.Char(100)
-  access      String   @db.Char(200)
-  description String   @db.Char(200)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  user users[]
 }
 
 model addresses {
@@ -51,6 +40,19 @@ model addresses {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+model typesOfUsers {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.Char(100)
+  access      String   @db.Char(200)
+  description String   @db.Char(200)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user users[]
+}
+
+
 
 model feedbacks {
   id        Int     @id @default(autoincrement())
@@ -116,7 +118,7 @@ model products {
   name          String
   image         String
   price         Decimal
-  cupSizeId     Int?
+  cupSizeId     Int
   stock         stock_products[]
   orderProducts order_products[]
   favoriteds    favoriteds[]

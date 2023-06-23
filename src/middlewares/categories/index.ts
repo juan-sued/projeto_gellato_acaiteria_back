@@ -22,7 +22,7 @@ const validateNotFoundCategoriesMiddleware = async (request: Request, response: 
 
   if (!isRegisteredCategories) throw errorFactory.notFound('Categories');
 
-  response.locals.product = isRegisteredCategories;
+  response.locals.category = isRegisteredCategories;
 
   next();
 };

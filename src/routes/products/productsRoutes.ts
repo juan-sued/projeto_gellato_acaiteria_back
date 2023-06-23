@@ -11,7 +11,7 @@ const productsRouter = Router();
 productsRouter
   .get('/', getProducts)
   .all('/*', validateJwtTokenMiddleware)
-  .post('/', validateSchemaMiddleware(productsSchemas.productsSchema), validateConflictProductMiddleware, insertProduct)
+  .post('/', validateSchemaMiddleware(productsSchemas.productsSchema), insertProduct)
   .get('/:id', validateIdParamsMiddleware, validateNotFoundProductMiddleware, getProducts)
   .patch('/:id', validateIdParamsMiddleware, validateNotFoundProductMiddleware, updateProduct)
   .delete('/:id', validateIdParamsMiddleware, validateNotFoundProductMiddleware, deleteProduct);
