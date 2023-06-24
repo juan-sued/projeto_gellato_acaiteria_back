@@ -1,17 +1,17 @@
 import { orders } from '@prisma/client';
-
 import { Request, Response } from 'express';
-import { OrderBasic } from '@/interfaces/ordersInterfaces';
+import { IOrder, OrderBasic } from '@/interfaces/ordersInterfaces';
 import { ordersService } from '@/services';
 
-export async function insertOrder(request: Request, response: Response) {
-  const newOrder: orders = request.body;
-  await ordersService.insertOrder(newOrder);
+async function insertOrder(request: Request, response: Response) {
+  const { products, details }: IOrder = request.body;
+
+  await ordersService.insertOrder({ products, details });
 
   response.sendStatus(201);
 }
 
-export async function getOrders(request: Request, response: Response) {
+async function getOrders(request: Request, response: Response) {
   const { name } = request.query as Record<string, string>;
   const { idParams } = response.locals;
   let result: OrderBasic[] | orders = [];
@@ -24,7 +24,7 @@ export async function getOrders(request: Request, response: Response) {
   response.status(200).send(result);
 }
 
-export async function updateOrder(req: Request, res: Response) {
+async function updateOrder(req: Request, res: Response) {
   const { idParams } = res.locals;
 
   const { total, subTotal } = req.body;
@@ -37,9 +37,11 @@ export async function updateOrder(req: Request, res: Response) {
   return res.status(200).send(updatedOrder);
 }
 
-export async function deleteOrder(request: Request, response: Response) {
+async function deleteOrder(request: Request, response: Response) {
   const { idParams } = response.locals;
   await ordersService.deleteOrder(idParams);
 
   response.sendStatus(200);
 }
+
+export { insertOrder, getOrders, updateOrder, deleteOrder };

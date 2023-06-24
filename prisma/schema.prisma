@@ -119,6 +119,7 @@ model products {
   image         String
   price         Decimal
   cupSizeId     Int
+  
   stock         stock_products[]
   orderProducts order_products[]
   favoriteds    favoriteds[]

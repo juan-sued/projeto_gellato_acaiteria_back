@@ -1,9 +1,7 @@
-import { addresses, Prisma, users } from '@prisma/client';
+import { Prisma, users } from '@prisma/client';
 import { prisma } from '@/databases/postgreSQL';
-import { ISign, ISignUp } from '@/interfaces/authInterfaces';
-import { UpdateAddressData, UpdateUserData, UsersBasic } from '@/interfaces/userInterfaces ';
-import { errorFactory } from '@/utils';
-import { exclude } from '@/utils/prisma-utils';
+import { ISignUp } from '@/interfaces/authInterfaces';
+import { UpdateUserData, UsersBasic } from '@/interfaces/userInterfaces ';
 
 //=================== GET =====================//
 function getUserByEmail(email: string) {

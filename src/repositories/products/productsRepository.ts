@@ -1,6 +1,7 @@
+import { IProductOrder } from './../../interfaces/ordersInterfaces';
 import { Prisma, products } from '@prisma/client';
 import { prisma } from '@/databases/postgreSQL';
-import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
+import { IProductInsert, ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
 
 //=================== GET =====================//
 
@@ -19,6 +20,13 @@ async function getProductById(id: number): Promise<products> {
   const product = await prisma.products.findUnique({
     where: {
       id,
+    },
+    include: {
+      stock: {
+        include: {
+          stock: true,
+        },
+      },
     },
   });
 
@@ -41,25 +49,11 @@ function getProductsByFilterName(name: string): Promise<ProductBasic[]> {
 
 //================= INSERT ===================//
 
-async function insertProduct(newProduct: products) {
+async function insertProduct(newProduct: IProductInsert) {
   await prisma.products.create({
     data: newProduct,
   });
 }
-
-// async function insertOfertDay(userId: number, newProduct: ofertsOfDay) {
-//   await prisma.ofertsOfDay.create({
-//     data: {
-//       userId: userId,
-//       description: newProduct.description,
-//       price_ofert: newProduct.price_ofert,
-//       product: { connect: { id: newProduct.productId } },
-//     },
-//     include: {
-//       product: true,
-//     },
-//   });
-// }
 
 //================= UPDATE ===================//
 

@@ -1,10 +1,22 @@
-import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
+import { IProductOrder } from './../../interfaces/ordersInterfaces';
+import { IProductInsert, ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
 import { productsRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
+import { exclude } from '@/utils/functions-utils';
 import { products } from '@prisma/client';
 
-async function insertProduct(newProduct: products) {
-  await productsRepository.insertProduct(newProduct);
+async function insertProduct(product: IProductOrder) {
+  const formatedProduct: any = exclude(
+    product,
+    'complementsIds',
+    'flavoursIds',
+    'fruitsIds',
+    'plusIds',
+    'toppingsIds',
+    'amount',
+  );
+
+  await productsRepository.insertProduct(formatedProduct);
 }
 
 async function getAllProducts(): Promise<ProductBasic[]> {

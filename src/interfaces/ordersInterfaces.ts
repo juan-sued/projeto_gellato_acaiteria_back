@@ -6,17 +6,12 @@ export type OrderBasic = Pick<orders, 'id' | 'createdAt' | 'status' | 'subTotal'
 
 //================= update ====================
 
-interface IOrder {
-  products: IProductOrder[];
-  details: IDetailsOrder;
-}
-
 interface IDetailsOrder {
   total: Prisma.Decimal | number;
   subtTotal: Prisma.Decimal | number;
 }
 
-interface IProductOrder extends Omit<products, 'price' | 'id'> {
+export interface IProductOrder extends Omit<products, 'price' | 'id'> {
   price: Prisma.Decimal | number;
   flavoursIds: number[];
   complementsIds: number[];
@@ -24,6 +19,11 @@ interface IProductOrder extends Omit<products, 'price' | 'id'> {
   fruitsIds: number[];
   plusIds: number[];
   amount: number;
+}
+
+export interface IOrder {
+  products: IProductOrder[];
+  details: IDetailsOrder;
 }
 
 const exempleOrder: IOrder = {
