@@ -8,8 +8,8 @@ import { validateConflictStockMiddleware, validateNotFoundStockMiddleware } from
 const stockRouter = Router();
 
 stockRouter
-  .get('/', getStock)
   .all('/*', validateJwtTokenMiddleware)
+  .get('/', getStock)
   .post('/', validateSchemaMiddleware(stockSchemas.stockSchema), validateConflictStockMiddleware, insertStock)
   .get('/:id', validateIdParamsMiddleware, validateNotFoundStockMiddleware, getStock)
   .patch(

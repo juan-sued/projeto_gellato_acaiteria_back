@@ -1,13 +1,5 @@
-import {
-  responseDataUser,
-  ResponseUsers,
-  UpdateAddressData,
-  UpdateUserData,
-  UsersBasic,
-} from '@/interfaces/userInterfaces ';
-import { addressesRepository, usersRepository } from '@/repositories';
+import { addressesRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
-import bcrypt from 'bcrypt';
 import { addresses } from '@prisma/client';
 
 async function createAddress(newAddress: Omit<addresses, 'id' | 'createdAt' | 'updatedAt'>): Promise<addresses> {

@@ -15,7 +15,7 @@ function getAllStock(): Promise<StockBasic[]> {
 
   return prisma.stock.findMany(params);
 }
-async function getStockById(id: number): Promise<stock> {
+async function getStockById(id: number): Promise<stock | null> {
   const product = await prisma.stock.findUnique({
     where: {
       id,

@@ -18,7 +18,7 @@ const validateConflictUsersMiddleware = async (request: Request, response: Respo
 const validateNotFoundUsersMiddleware = async (request: Request, response: Response, next: NextFunction) => {
   const { idParams } = response.locals;
 
-  const isRegisteredUsers = await usersRepository.getUserById(id);
+  const isRegisteredUsers = await usersRepository.getUserOrAdministratorById(idParams);
 
   if (!isRegisteredUsers) throw errorFactory.notFound('User');
 

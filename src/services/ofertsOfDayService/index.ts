@@ -1,11 +1,8 @@
+import { IProductOrder } from './../../interfaces/ordersInterfaces';
 import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
 import { productsRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
 import { ofertsOfDay, products } from '@prisma/client';
-
-async function insertProduct(newProduct: products) {
-  await productsRepository.insertProduct(newProduct);
-}
 
 async function getAllProducts(): Promise<ProductBasic[]> {
   const products = await productsRepository.getAllProducts();
@@ -41,4 +38,4 @@ async function deleteProduct(id: number) {
   await productsRepository.deleteProduct(id);
 }
 
-export { deleteProduct, updateProduct, getProductsByName, getProductById, getAllProducts, insertProduct };
+export { deleteProduct, updateProduct, getProductsByName, getProductById, getAllProducts };

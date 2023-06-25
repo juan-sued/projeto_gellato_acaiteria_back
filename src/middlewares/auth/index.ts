@@ -16,7 +16,7 @@ async function validateJwtTokenMiddleware(request: Request, response: Response, 
   if (!token) throw errorFactory.unauthorized('token');
   const payload = await decodedToken(token);
 
-  const user = await usersRepository.getUserById(payload.id);
+  const user = await usersRepository.getUserOrAdministratorById(payload.id);
 
   if (!user) throw errorFactory.notFound('usuário inexistente');
 
@@ -24,4 +24,17 @@ async function validateJwtTokenMiddleware(request: Request, response: Response, 
 
   next();
 }
-export { validateJwtTokenMiddleware };
+
+const validateNotFoundEmailMiddleware = async (request: Request, response: Response, next: NextFunction) => {
+  const { email } = request.body;
+
+  const isRegisteredUser = await usersRepository.getUserByEmail(email);
+
+  if (!isRegisteredUser) throw errorFactory.notFound('user');
+
+  response.locals.userInDB = isRegisteredUser;
+
+  next();
+};
+
+export { validateJwtTokenMiddleware, validateNotFoundEmailMiddleware };

@@ -1,10 +1,12 @@
+import { IProductOrder } from '@/interfaces/ordersInterfaces';
 import { products } from '@prisma/client';
+
 import { productsService } from '@/services';
 import { Request, Response } from 'express';
-import { ProductBasic } from '@/interfaces/productsInterfaces';
+import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
 
 export async function insertProduct(request: Request, response: Response) {
-  const newProduct: products = request.body;
+  const newProduct: IProductOrder = request.body;
   await productsService.insertProduct(newProduct);
 
   response.sendStatus(201);
@@ -26,17 +28,13 @@ export async function getProducts(request: Request, response: Response) {
 export async function updateProduct(req: Request, res: Response) {
   const { idParams } = res.locals;
 
-  const { title, image, price, description, categoryId, unitOfMeasure, amount, quantityForUnity } = req.body;
+  const { cupSizeId, image, name, price }: UpdateProductData = req.body;
 
   const updatedProduct = await productsService.updateProduct(idParams, {
-    title,
+    cupSizeId,
     image,
+    name,
     price,
-    description,
-    categoryId,
-    unitOfMeasure,
-    amount,
-    quantityForUnity,
   });
 
   return res.status(200).send(updatedProduct);

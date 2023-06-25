@@ -1,10 +1,53 @@
-import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
-import { productsRepository } from '@/repositories';
-import { errorFactory } from '@/utils';
+import { IProductOrder } from './../../interfaces/ordersInterfaces';
+import { IProductInsert, ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
+import { productsRepository, stockRepository, stock_products } from '@/repositories';
+import { errorFactory, productsUtils } from '@/utils';
+import { exclude } from '@/utils/functions-utils';
 import { products } from '@prisma/client';
 
-async function insertProduct(newProduct: products) {
-  await productsRepository.insertProduct(newProduct);
+async function insertProduct({
+  image,
+  name,
+  price,
+  cupSizeId,
+  flavoursIds,
+  complementsIds,
+  toppingsIds,
+  fruitsIds,
+  plusIds,
+  amount,
+}: IProductOrder) {
+  const productIds = [cupSizeId, ...flavoursIds, ...complementsIds, ...toppingsIds, ...fruitsIds, ...plusIds];
+
+  await productsUtils.checkStockAvailability(productIds, amount);
+  const product = {
+    image,
+    name,
+    price,
+    cupSizeId,
+    flavoursIds,
+    complementsIds,
+    toppingsIds,
+    fruitsIds,
+    plusIds,
+    amount,
+  };
+
+  const formatedProduct: IProductInsert = exclude(
+    product,
+    'complementsIds',
+    'flavoursIds',
+    'fruitsIds',
+    'plusIds',
+    'toppingsIds',
+    'amount',
+  );
+
+  const productCreated = await productsRepository.insertProduct(formatedProduct);
+
+  for (const productId of productIds) await stock_products.insertStock_Product(productCreated.id, productId);
+
+  return productCreated;
 }
 
 async function getAllProducts(): Promise<ProductBasic[]> {

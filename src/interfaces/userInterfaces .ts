@@ -4,12 +4,12 @@ import { addresses, users } from '@prisma/client';
 
 export type UsersBasic = Pick<users, 'id' | 'name' | 'phone'>;
 
-export interface ResponseUsers {
+export interface ResponseAllUsersAndAdministrators {
   users: UsersBasic[];
   administrators: UsersBasic[];
 }
 export interface responseDataUser {
-  user: UsersBasic;
+  user: UsersBasic | {};
   addresses: addresses[];
 }
 

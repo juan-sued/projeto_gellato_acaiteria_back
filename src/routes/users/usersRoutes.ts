@@ -9,7 +9,7 @@ usersRouter
   .all('*', validateJwtTokenMiddleware)
   .get('/', getUsersController)
   .get('/:id', validateIdParamsMiddleware, getUsersController)
-  .patch('/', validateSchemaMiddleware(userSchemas.userSchema), updateUserController)
+  .patch('/', validateSchemaMiddleware(userSchemas.userUpdateSchema), updateUserController)
   .delete('/', deleteUserController);
 
 export { usersRouter };

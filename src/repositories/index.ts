@@ -4,3 +4,6 @@ export * as productsRepository from './products/productsRepository';
 export * as addressesRepository from './users/addressesRepository';
 export * as stockRepository from './stock/stockRepository';
 export * as categoriesRepository from './categories/categoriesRepository';
+export * as ordersRepository from './orders/ordersRepository';
+export * as stock_products from './middleTables/stock_products';
+export * as order_products from './middleTables/order_products';

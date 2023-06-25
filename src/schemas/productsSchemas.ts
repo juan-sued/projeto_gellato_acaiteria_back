@@ -8,7 +8,7 @@ const productsSchema = Joi.object({
   flavoursIds: Joi.array().items(Joi.number()).required(),
   complementsIds: Joi.array().items(Joi.number()).required(),
   toppingsIds: Joi.array().items(Joi.number()).required(),
-  fruitId: Joi.number().required(),
+  fruitsIds: Joi.array().items(Joi.number()).required(),
   plusIds: Joi.array().items(Joi.number()).required(),
 });
 

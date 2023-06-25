@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 
 import { signInService, signUpService } from '@/services/authServices';
-import { ISign } from '@/interfaces/authInterfaces';
+import { ISign, ISignUp } from '@/interfaces/authInterfaces';
 
 export async function registerUserController(request: Request, response: Response) {
-  const newUser: ISign = request.body;
+  const newUser: ISignUp = request.body;
   await signUpService(newUser);
 
   response.sendStatus(201);
@@ -19,7 +19,9 @@ type LoginResponse = {
 };
 
 export async function loginUserController(request: Request, response: Response) {
-  const user: ISign = request.body;
-  const loginResponse: LoginResponse = await signInService(user);
+  const userLogin: ISign = request.body;
+  const { userInDB } = response.locals;
+
+  const loginResponse: LoginResponse = await signInService(userLogin, userInDB);
   response.status(200).send(loginResponse);
 }
