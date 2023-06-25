@@ -24,6 +24,7 @@ export interface IProductOrder extends Omit<products, 'price' | 'id'> {
 export interface IOrder {
   products: IProductOrder[];
   details: IDetailsOrder;
+  addressId: number;
 }
 
 const exempleOrder: IOrder = {
@@ -57,6 +58,7 @@ const exempleOrder: IOrder = {
     total: 32.5,
     subtTotal: 25.5,
   },
+  addressId: 2,
 };
 
 export interface UpdateOrderData {

@@ -1,3 +1,4 @@
+import { addressesSchemas } from '@/schemas';
 import Joi from 'joi';
 import { productsSchema } from './productsSchemas';
 
@@ -17,6 +18,7 @@ const productsOrderSchema = Joi.array()
 const orderSchema = Joi.object({
   products: productsOrderSchema,
   details: detailsOrderSchema,
+  addressId: Joi.number().required(),
 });
 
 export { orderSchema };

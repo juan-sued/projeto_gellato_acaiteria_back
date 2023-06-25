@@ -4,9 +4,9 @@ import { IOrder, OrderBasic } from '@/interfaces/ordersInterfaces';
 import { ordersService } from '@/services';
 
 async function insertOrder(request: Request, response: Response) {
-  const { products, details }: IOrder = request.body;
-
-  await ordersService.insertOrder({ products, details });
+  const { products, details, addressId }: IOrder = request.body;
+  const { idUser } = response.locals;
+  await ordersService.insertOrder({ products, details, addressId }, idUser);
 
   response.sendStatus(201);
 }

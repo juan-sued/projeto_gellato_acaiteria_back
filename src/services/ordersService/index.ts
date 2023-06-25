@@ -1,22 +1,38 @@
 import { IOrder } from './../../interfaces/ordersInterfaces';
 import { OrderBasic, UpdateOrderData } from '@/interfaces/ordersInterfaces';
-import { ordersRepository, stock_products } from '@/repositories';
+import { order_products, ordersRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
 import { orders } from '@prisma/client';
 import { productsService } from '..';
+import { InsertOrder } from '@/repositories/orders/ordersRepository';
 
-async function insertOrder({ products, details }: IOrder) {
-  for (const product of products) await productsService.insertProduct(product);
+async function insertOrder({ products, details, addressId }: IOrder, userId: number) {
+  interface ProductsAvaiable {
+    productId: number;
+    quantity: number;
+  }
+  const productsAvaiables: ProductsAvaiable[] = [];
 
-  // relacionar ingredientes com o product através da tabela stock_product - tabela stock_product
+  for (const product of products) {
+    const productCreated = await productsService.insertProduct(product);
+    if (productCreated)
+      productsAvaiables.push({
+        productId: productCreated.id,
+        quantity: product.amount,
+      });
+  }
 
-  //
-  //
-  //
+  const newOrder: InsertOrder = {
+    userId,
+    total: details.total,
+    subTotal: details.subtTotal,
+    addressId,
+  };
+  const order = await ordersRepository.insertOrder(newOrder);
+
+  for (const product of productsAvaiables) await order_products.insertOrder_Product(product, order.id);
 }
 
-// relacionar ingredientes com o product através da tabela stock_product - tabela stock_product
-// relacionar o product com order através da tabela order_products - tabela order_products
 async function getAllOrders(): Promise<OrderBasic[]> {
   const orders = await ordersRepository.getAllOrders();
   if (!orders) throw errorFactory.notFound('order');

@@ -6,11 +6,12 @@ import { OrderBasic, UpdateOrderData } from '@/interfaces/ordersInterfaces';
 
 function getAllOrders(): Promise<OrderBasic[]> {
   const params: Prisma.ordersFindManyArgs = {
-    select: {
-      id: true,
-      createdAt: true,
-      status: true,
-      subTotal: true,
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
     },
   };
 
@@ -20,6 +21,37 @@ async function getOrderById(id: number): Promise<orders> {
   const order = await prisma.orders.findUnique({
     where: {
       id,
+    },
+
+    include: {
+      address: {
+        select: {
+          cep: true,
+          state: true,
+          city: true,
+          neighborhood: true,
+          street: true,
+          number: true,
+          addressesDetail: true,
+        },
+      },
+      products: {
+        select: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              cupSize: {
+                select: {
+                  quantity_for_unity: true,
+                },
+              },
+            },
+          },
+          quantity: true,
+        },
+      },
     },
   });
 
@@ -45,10 +77,19 @@ function getOrdersByFilterName(name: string): Promise<OrderBasic[]> {
 
 //================= INSERT ===================//
 
-async function insertOrder(newOrder: orders) {
-  await prisma.orders.create({
+export interface InsertOrder {
+  userId: number;
+  addressId: number;
+  total: number | Prisma.Decimal;
+  subTotal: number | Prisma.Decimal;
+}
+
+async function insertOrder(newOrder: InsertOrder): Promise<orders> {
+  const order = await prisma.orders.create({
     data: newOrder,
   });
+
+  return order;
 }
 
 async function updateOrder(id: number, updateOrderData: UpdateOrderData) {
