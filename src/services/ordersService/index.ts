@@ -1,24 +1,12 @@
-import { IOrder, IProductOrder } from './../../interfaces/ordersInterfaces';
+import { IOrder } from './../../interfaces/ordersInterfaces';
 import { OrderBasic, UpdateOrderData } from '@/interfaces/ordersInterfaces';
-import { ordersRepository, stockRepository, stock_products, productsRepository } from '@/repositories';
-import { errorFactory, productsUtils } from '@/utils';
+import { ordersRepository, stock_products } from '@/repositories';
+import { errorFactory } from '@/utils';
 import { orders } from '@prisma/client';
 import { productsService } from '..';
 
 async function insertOrder({ products, details }: IOrder) {
-  //itera por cada tipo de ingredientId verifica disponibilidade de cada ingrediente - tabela stock
-  await productsUtils.checkStockAvailability(products);
-  //todos os produtos disponíveis
-  for (const product of products) {
-    const productCreated = await productsService.insertProduct(product);
-
-    const { cupSizeId, flavoursIds, complementsIds, toppingsIds, fruitsIds, plusIds, amount } = product;
-
-    const productIds = [cupSizeId, ...flavoursIds, ...complementsIds, ...toppingsIds, ...fruitsIds, ...plusIds];
-
-    for (const productId of productIds) await stock_products.insertStock_Product(productCreated.id, productId);
-  }
-  //produtos adicionados ao banco
+  for (const product of products) await productsService.insertProduct(product);
 
   // relacionar ingredientes com o product através da tabela stock_product - tabela stock_product
 

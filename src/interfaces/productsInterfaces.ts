@@ -4,8 +4,11 @@ import { Prisma, products } from '@prisma/client';
 
 export type ProductBasic = Pick<products, 'id' | 'name' | 'image'>;
 
-export interface IProductInsert extends Omit<products, 'id' | 'cupSizedId'> {
-  cupSizedId: number | null;
+export interface IProductInsert {
+  image: string;
+  name: string;
+  price: Prisma.Decimal | number;
+  cupSizeId: number;
 }
 
 //================= update ====================
