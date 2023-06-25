@@ -7,9 +7,17 @@ import { productsService } from '..';
 
 async function insertOrder({ products, details }: IOrder) {
   //itera por cada tipo de ingredientId verifica disponibilidade de cada ingrediente - tabela stock
-  await productsUtils.checkProductAvailability(products);
+  await productsUtils.checkStockAvailability(products);
   //todos os produtos disponíveis
-  for (const product of products) productsService.insertProduct(product);
+  for (const product of products) {
+    const productCreated = await productsService.insertProduct(product);
+
+    const { cupSizeId, flavoursIds, complementsIds, toppingsIds, fruitsIds, plusIds, amount } = product;
+
+    const productIds = [cupSizeId, ...flavoursIds, ...complementsIds, ...toppingsIds, ...fruitsIds, ...plusIds];
+
+    for (const productId of productIds) await stock_products.insertStock_Product(productCreated.id, productId);
+  }
   //produtos adicionados ao banco
 
   // relacionar ingredientes com o product através da tabela stock_product - tabela stock_product

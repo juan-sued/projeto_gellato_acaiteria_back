@@ -21,11 +21,11 @@ async function getStock_ProductById(id: number): Promise<stock_products> {
 
 //================= INSERT ===================//
 
-async function insertStock_Product(newStock_Product: stock_products) {
+async function insertStock_Product(productId: number, stockId: number) {
   await prisma.stock_products.create({
     data: {
-      productId: newStock_Product.id,
-      stockId: newStock_Product.stockId,
+      productId: productId,
+      stockId: stockId,
     },
   });
 }

@@ -16,7 +16,9 @@ async function insertProduct(product: IProductOrder) {
     'amount',
   );
 
-  await productsRepository.insertProduct(formatedProduct);
+  const productCreated = await productsRepository.insertProduct(formatedProduct);
+
+  return productCreated;
 }
 
 async function getAllProducts(): Promise<ProductBasic[]> {

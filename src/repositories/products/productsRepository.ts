@@ -23,8 +23,19 @@ async function getProductById(id: number): Promise<products> {
     },
     include: {
       stock: {
-        include: {
-          stock: true,
+        select: {
+          stock: {
+            select: {
+              id: true,
+              title: true,
+              category: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -50,9 +61,11 @@ function getProductsByFilterName(name: string): Promise<ProductBasic[]> {
 //================= INSERT ===================//
 
 async function insertProduct(newProduct: IProductInsert) {
-  await prisma.products.create({
+  const productCreated = await prisma.products.create({
     data: newProduct,
   });
+
+  return productCreated;
 }
 
 //================= UPDATE ===================//

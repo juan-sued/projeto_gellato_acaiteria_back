@@ -2,7 +2,7 @@ import { IProductOrder } from '@/interfaces/ordersInterfaces';
 import { stockRepository } from '@/repositories';
 import { errorFactory } from '.';
 
-async function checkProductAvailability(products: IProductOrder[]) {
+async function checkStockAvailability(products: IProductOrder[]) {
   const unavailabilityList: string[] = [];
 
   for (const product of products) {
@@ -12,6 +12,7 @@ async function checkProductAvailability(products: IProductOrder[]) {
 
     for (const productId of productIds) {
       const stock = await stockRepository.getStockById(productId);
+      console.log(stock);
       if (!stock) unavailabilityList.push('productId: ' + productId);
       if (amount <= 0) unavailabilityList.push(stock.title);
     }
@@ -20,4 +21,4 @@ async function checkProductAvailability(products: IProductOrder[]) {
   if (unavailabilityList.length > 0) throw errorFactory.notFound(unavailabilityList.join(', '));
 }
 
-export { checkProductAvailability };
+export { checkStockAvailability };
