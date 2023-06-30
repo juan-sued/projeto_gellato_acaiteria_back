@@ -1,5 +1,5 @@
 import { stock, Prisma } from '@prisma/client';
-import { prisma } from '@/databases/postgreSQL';
+import { prisma } from '@/config';
 import { StockBasic, UpdateStockData } from '@/interfaces/stockInterfaces';
 
 //=================== GET =====================//

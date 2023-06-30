@@ -1,5 +1,5 @@
 import { addresses, Prisma, users } from '@prisma/client';
-import { prisma } from '@/databases/postgreSQL';
+import { prisma } from '@/config';
 import { UpdateAddressData, UpdateUserData, UsersBasic } from '@/interfaces/userInterfaces ';
 
 //=================== GET =====================//

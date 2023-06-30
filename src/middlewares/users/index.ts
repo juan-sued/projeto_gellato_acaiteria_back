@@ -23,7 +23,7 @@ const validateNotFoundUsersMiddleware = async (request: Request, response: Respo
   if (!isRegisteredUsers) throw errorFactory.notFound('User');
 
   response.locals.user = isRegisteredUsers;
-
+  console.log('aqui');
   next();
 };
 

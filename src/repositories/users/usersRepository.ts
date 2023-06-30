@@ -1,5 +1,5 @@
 import { Prisma, users } from '@prisma/client';
-import { prisma } from '@/databases/postgreSQL';
+import { prisma } from '@/config';
 import { ISignUp } from '@/interfaces/authInterfaces';
 import { UpdateUserData, UsersBasic } from '@/interfaces/userInterfaces ';
 
