@@ -1,9 +1,9 @@
-import { prisma } from '@/databases/postgreSQL';
+import { prisma } from '@/config';
 
 //=================== GET =====================//
 function getFavoritedsById(id: number) {
   return prisma.favoriteds.findMany({
-    where: { userId: id }
+    where: { userId: id },
   });
 }
 

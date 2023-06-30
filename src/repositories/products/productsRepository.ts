@@ -1,6 +1,6 @@
 import { IProductOrder } from './../../interfaces/ordersInterfaces';
 import { Prisma, products } from '@prisma/client';
-import { prisma } from '@/databases/postgreSQL';
+import { prisma } from '@/config';
 import { IProductInsert, ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
 
 //=================== GET =====================//

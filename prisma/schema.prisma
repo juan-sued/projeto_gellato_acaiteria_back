@@ -14,7 +14,7 @@ model users {
   phone        String?       @db.VarChar(12)
   cpf          String?       @unique @db.VarChar(11)
   password     String        @db.Text()
-  typeOfUserId Int           @default(0) @db.SmallInt()
+  typeOfUserId Int           @default(1) @db.SmallInt()
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   ofertsOfDay  ofertsOfDay[]

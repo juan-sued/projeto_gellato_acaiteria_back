@@ -1,4 +1,3 @@
-import { IProductOrder } from '@/interfaces/ordersInterfaces';
 import { stockRepository } from '@/repositories';
 import { errorFactory } from '.';
 

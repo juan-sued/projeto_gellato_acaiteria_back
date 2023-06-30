@@ -1,5 +1,5 @@
 import { ofertsOfDay, Prisma, products } from '@prisma/client';
-import { prisma } from '@/databases/postgreSQL';
+import { prisma } from '@/config';
 import { UpdateOfertDayData } from '@/interfaces/ofertOfDay';
 
 //============= OfertsDay ==============//
