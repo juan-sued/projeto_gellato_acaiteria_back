@@ -100,8 +100,7 @@ function getAdministratorsByFilterName(name: string): Promise<UsersBasic[]> {
 async function insertUser(newUser: ISignUp) {
   delete newUser.confirmPassword;
 
-  const result = await prisma.users.create({ data: newUser });
-  return result;
+  return await prisma.users.create({ data: newUser });
 }
 
 //================= UPDATE ===================//

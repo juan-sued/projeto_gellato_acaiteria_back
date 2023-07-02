@@ -30,7 +30,7 @@ const validateNotFoundEmailMiddleware = async (request: Request, response: Respo
 
   const isRegisteredUser = await usersRepository.getUserByEmail(email);
 
-  if (!isRegisteredUser) throw errorFactory.notFound('user');
+  if (!isRegisteredUser) throw errorFactory.forbidden();
 
   response.locals.userInDB = isRegisteredUser;
 
