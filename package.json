@@ -2,12 +2,12 @@
   "name": "projeto_gellato_acaiteria_backend",
   "version": "1.0.0",
   "description": "Projeto pika das galáxias",
-  "main": "dist/server.js",
+  "main": "server.js",
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "ttsc -p tsconfig.build.json",
     "prepare": "husky install",
-    "start": "node dist/server.js",
+    "start": "node ./dist/server.js",
     "seed": "npm run prod:load-envs prisma db seed",
     "migration:run": "prisma migrate deploy",
     "migration:generate": "npm run prod:load-envs prisma migrate dev",
@@ -42,7 +42,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "engines": {
-    "node": ">=14 <15"
+    "node": "18"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",
