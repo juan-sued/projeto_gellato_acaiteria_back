@@ -2,7 +2,7 @@
   "name": "projeto_gellato_acaiteria_backend",
   "version": "1.0.0",
   "description": "Projeto pika das galáxias",
-  "main": "server.js",
+  "main": "dist/server.js",
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "ttsc -p tsconfig.build.json",
