@@ -24,12 +24,10 @@ async function signInService(userLogin: ISign, userInDB: users) {
   };
 }
 
-async function signUpService(newUser: ISignUp) {
-  const { password } = newUser;
+async function signUpService({ email, name, password, confirmPassword }: ISignUp): Promise<users> {
+  password = await bcrypt.hash(password, 10);
 
-  newUser.password = await bcrypt.hash(password, 10);
-
-  await usersRepository.insertUser(newUser);
+  return await usersRepository.insertUser({ email, name, password, confirmPassword });
 }
 
 export { signInService, signUpService };

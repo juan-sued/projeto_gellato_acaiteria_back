@@ -98,7 +98,7 @@ model stock_products {
   id        Int      @id @default(autoincrement())
   stockId   Int      @db.Integer
   productId Int      @db.Integer
-  stock     stock    @relation(fields: [stockId], references: [id])
+  stock     stock    @relation(fields: [stockId], references: [id] , onDelete: Cascade)
   product   products @relation(fields: [productId], references: [id])
 }
 
