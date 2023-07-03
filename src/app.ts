@@ -8,7 +8,7 @@ import { authRouter } from './routes/auth/authRoutes';
 import { productsRouter } from './routes/products/productsRoutes';
 import { addressesRouter } from './routes/users/addressesRoutes';
 import { ordersRouter } from './routes/orders/ordersRoutes';
-import { stockRouter } from './routes';
+import { stockRouter, typesOfUsersRouter } from './routes';
 import { categoriesRouter } from './routes/categories/categoriesRouter';
 import { connectDb, disconnectDB, loadEnv } from './config';
 
@@ -20,6 +20,7 @@ app
   .use(cors())
   .use(json())
   .get('/health', (_req, res) => res.send('OK!'))
+  .use('/types-users', typesOfUsersRouter)
   .use('/users', usersRouter)
   .use('/addresses', addressesRouter)
   .use('/auth', authRouter)

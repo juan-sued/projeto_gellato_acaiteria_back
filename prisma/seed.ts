@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import dayjs from 'dayjs';
+import bcrypt from 'bcrypt';
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -37,30 +38,10 @@ async function main() {
         image: 'image1.jpg',
         price: 9.99,
         description: 'Description 1',
-        categoryId: 1,
+        categoryId: category?.id ?? 4,
         unit_of_measure: 'unit',
         amount: 10,
         quantity_for_unity: 1.5,
-      },
-      {
-        title: 'Product 2',
-        image: 'image2.jpg',
-        price: 19.99,
-        description: 'Description 2',
-        categoryId: 2,
-        unit_of_measure: 'unit',
-        amount: 20,
-        quantity_for_unity: 1.2,
-      },
-      {
-        title: 'Product 3',
-        image: 'image3.jpg',
-        price: 29.99,
-        description: 'Description 3',
-        categoryId: 3,
-        unit_of_measure: 'unit',
-        amount: 15,
-        quantity_for_unity: 2.0,
       },
     ];
 
@@ -85,7 +66,6 @@ async function main() {
         access: 'low',
         description: 'Regular user',
       },
-      // Adicione mais objetos de mock conforme necessário
     ];
     for (const typesOfUser of mockTypesOfUsers) {
       await prisma.typesOfUsers.create({
@@ -93,8 +73,24 @@ async function main() {
       });
     }
   }
+  let userDB = await prisma.users.findFirst();
 
-  console.log({ ingredient, category, acessLvl });
+  if (!userDB)
+    async () => {
+      const mockUser = {
+        name: 'Juan Sued',
+        email: 'juansued22@gmail.com',
+        password: '112316',
+        typeOfUserId: acessLvl?.id ?? 7,
+      };
+
+      const passwordEncripted = await bcrypt.hash(mockUser.password, 10);
+      userDB = await prisma.users.create({
+        data: { ...mockUser, password: passwordEncripted },
+      });
+    };
+
+  console.log({ ingredient, category, acessLvl, userDB });
 }
 
 main()

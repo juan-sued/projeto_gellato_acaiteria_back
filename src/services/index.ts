@@ -7,3 +7,4 @@ export * as ofertsOfDayService from './ofertsOfDayService';
 export * as stockService from './stockService';
 export * as categoriesService from './categoriesService';
 export * as ordersService from './ordersService';
+export * as typesOfUsersService from './typesOfUsersService';

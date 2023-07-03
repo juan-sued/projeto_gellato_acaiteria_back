@@ -5,3 +5,4 @@ export * as productsSchemas from './productsSchemas';
 export * as ordersSchemas from './ordersSchemas';
 export * as categorySchemas from './categorySchemas';
 export * as userSchemas from './userSchemas';
+export * as typesOfUsersSchemas from './typesOfUsersSchemas';

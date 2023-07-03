@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import { ISign, ISignUp } from '@/interfaces/authInterfaces';
-import { usersRepository } from '@/repositories';
 import { errorFactory } from '@/utils';
 import { createToken } from './jwtToken';
 import { users } from '@prisma/client';
+import { usersRepository } from '@/repositories';
 
 async function signInService(userLogin: ISign, userInDB: users) {
   const dbPassword = userInDB?.password ?? '';

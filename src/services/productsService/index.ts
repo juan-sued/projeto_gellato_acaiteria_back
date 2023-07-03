@@ -1,4 +1,4 @@
-import { IProductOrder } from './../../interfaces/ordersInterfaces';
+import { IProductOrder } from '@/interfaces/ordersInterfaces';
 import { IProductInsert, ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
 import { productsRepository, stockRepository, stock_products } from '@/repositories';
 import { errorFactory, productsUtils } from '@/utils';
@@ -76,8 +76,6 @@ async function updateProduct(id: number, updateProductData: UpdateProductData) {
   if (!updateProductData) throw errorFactory.unprocessableEntity(['data inexistent']);
 
   await productsRepository.updateProduct(id, updateProductData);
-
-  return;
 }
 
 async function deleteProduct(id: number) {

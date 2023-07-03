@@ -2,9 +2,10 @@ import { products } from '@prisma/client';
 import { productsService } from '@/services';
 import { Request, Response } from 'express';
 import { ProductBasic } from '@/interfaces/productsInterfaces';
+import { IProductOrder } from '@/interfaces/ordersInterfaces';
 
 export async function insertProduct(request: Request, response: Response) {
-  const newProduct: products = request.body;
+  const newProduct: IProductOrder = request.body;
   await productsService.insertProduct(newProduct);
 
   response.sendStatus(201);
@@ -16,35 +17,31 @@ export async function getProducts(request: Request, response: Response) {
   let result: ProductBasic[] | products = [];
   if (name) result = await productsService.getProductsByName(name);
 
-  if (id) result = await productsService.getProductById(id);
+  if (idParams) result = await productsService.getProductById(idParams);
 
-  if (!name && !id) result = await productsService.getAllProducts();
+  if (!name && !idParams) result = await productsService.getAllProducts();
 
   response.status(200).send(result);
 }
 
 export async function updateProduct(req: Request, res: Response) {
-  const { id } = req.params;
-  const { title, image, price, description, categoryId, unitOfMeasure, amount, quantityForUnity } = req.body;
+  const { idParams } = res.locals;
+  const { id, image, name, cupSizeId, price } = req.body;
 
-  const updatedProduct = await productsService.updateProduct(id, {
-    title,
+  await productsService.updateProduct(idParams, {
+    id,
     image,
+    name,
+    cupSizeId,
     price,
-    description,
-    categoryId,
-    unitOfMeasure,
-    amount,
-    quantityForUnity,
   });
 
-  return res.status(200).send(updatedProduct);
+  return res.sendStatus(200);
 }
 
 export async function deleteProduct(request: Request, response: Response) {
   const { idParams } = response.locals;
-  console.log('entrou');
-  await productsService.deleteProduct(id);
+  await productsService.deleteProduct(idParams);
 
   response.sendStatus(200);
 }
