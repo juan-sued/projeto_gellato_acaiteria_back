@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Projeto pika das galáxias",
   "main": "server.js",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "ttsc -p tsconfig.build.json",
@@ -41,9 +44,7 @@
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
-  "engines": {
-    "node": "18"
-  },
+
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",
     "@types/bcrypt": "^5.0.0",
