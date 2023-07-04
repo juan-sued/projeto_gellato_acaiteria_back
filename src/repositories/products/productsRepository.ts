@@ -16,6 +16,7 @@ function getAllProducts(): Promise<ProductBasic[]> {
 
   return prisma.products.findMany(params);
 }
+
 async function getProductById(id: number): Promise<products> {
   const product = await prisma.products.findUnique({
     where: {

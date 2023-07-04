@@ -1,7 +1,7 @@
 import { IProductOrder } from '@/interfaces/ordersInterfaces';
-import { products } from '@prisma/client';
+import { categories, products } from '@prisma/client';
 
-import { productsService } from '@/services';
+import { categoriesService, productsService } from '@/services';
 import { Request, Response } from 'express';
 import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
 
@@ -23,6 +23,16 @@ export async function getProducts(request: Request, response: Response) {
   if (!name && !idParams) result = await productsService.getAllProducts();
 
   response.status(200).send(result);
+}
+
+export async function getProductsAndCategories(request: Request, response: Response) {
+  const products: ProductBasic[] = await productsService.getAllProducts();
+  const categories: categories[] = await categoriesService.getAllCategories();
+
+  response.status(200).send({
+    products: products,
+    categories: categories,
+  });
 }
 
 export async function updateProduct(req: Request, res: Response) {
