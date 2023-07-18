@@ -2,10 +2,10 @@ import bcrypt from 'bcrypt';
 import { ISign, ISignUp } from '@/interfaces/authInterfaces';
 import { errorFactory } from '@/utils';
 import { createToken } from './jwtToken';
-import { users } from '@prisma/client';
+import { typesOfUsers, users } from '@prisma/client';
 import { usersRepository } from '@/repositories';
 
-async function signInService(userLogin: ISign, userInDB: users) {
+async function signInService(userLogin: ISign, userInDB: users, access: typesOfUsers) {
   const dbPassword = userInDB?.password ?? '';
 
   const isValidPassword = await bcrypt.compare(userLogin.password, dbPassword);
@@ -19,6 +19,8 @@ async function signInService(userLogin: ISign, userInDB: users) {
     user: {
       id: userInDB.id,
       name: userInDB.name,
+      permissions: access,
+      email: userInDB.email,
     },
     token: token,
   };

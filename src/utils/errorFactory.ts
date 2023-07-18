@@ -15,7 +15,7 @@ export function conflict(message: string) {
 export function unauthorized(entity: string) {
   return {
     type: 'error_unauthorized',
-    message: `There is no ${entity} in the request.`,
+    message: entity,
   };
 }
 

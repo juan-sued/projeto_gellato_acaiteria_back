@@ -1,9 +1,15 @@
 import { IProductOrder } from '@/interfaces/ordersInterfaces';
-import { IProductInsert, ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
+import {
+  IProductInsert,
+  ProductBasic,
+  ProductsAndCategories,
+  UpdateProductData,
+} from '@/interfaces/productsInterfaces';
 import { productsRepository, stockRepository, stock_products } from '@/repositories';
 import { errorFactory, productsUtils } from '@/utils';
 import { exclude } from '@/utils/functions-utils';
-import { products } from '@prisma/client';
+import { products, categories } from '@prisma/client';
+import { categoriesService } from '..';
 
 async function insertProduct({
   image,
@@ -57,6 +63,44 @@ async function getAllProducts(): Promise<ProductBasic[]> {
   return products;
 }
 
+async function getProducts_Favorites_Categories(userId: number): Promise<ProductsAndCategories> {
+  const products = await productsRepository.getAllProducts();
+  if (!products) throw errorFactory.notFound('products');
+
+  const favoriteds = await productsRepository.getFavoriteds(userId);
+  if (!favoriteds) throw errorFactory.notFound('favoriteds');
+  const categories = await categoriesService.getAllCategories();
+  if (!categories) throw errorFactory.notFound('categories');
+
+  const notFavoritedProducts = products.filter(
+    (product) => !favoriteds.some((favorited) => favorited.id === product.id),
+  );
+
+  return {
+    products: {
+      notFavoriteds: notFavoritedProducts,
+      favoriteds: favoriteds,
+    },
+    categories,
+  };
+}
+
+async function getProductsAndCategories(): Promise<ProductsAndCategories> {
+  const products = await productsRepository.getAllProducts();
+  if (!products) throw errorFactory.notFound('products');
+
+  const categories = await categoriesService.getAllCategories();
+  if (!categories) throw errorFactory.notFound('categories');
+
+  return {
+    products: {
+      notFavoriteds: products,
+      favoriteds: [],
+    },
+    categories,
+  };
+}
+
 async function getProductsByName(name: string): Promise<ProductBasic[]> {
   const products: ProductBasic[] = await productsRepository.getProductsByFilterName(name);
 
@@ -82,4 +126,13 @@ async function deleteProduct(id: number) {
   await productsRepository.deleteProduct(id);
 }
 
-export { deleteProduct, updateProduct, getProductsByName, getProductById, getAllProducts, insertProduct };
+export {
+  deleteProduct,
+  updateProduct,
+  getProductsByName,
+  getProductById,
+  getAllProducts,
+  getProductsAndCategories,
+  insertProduct,
+  getProducts_Favorites_Categories,
+};

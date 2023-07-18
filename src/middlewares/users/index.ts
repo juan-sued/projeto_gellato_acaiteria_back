@@ -10,7 +10,6 @@ const validateConflictUsersMiddleware = async (request: Request, response: Respo
   const isRegisteredUsers = await usersRepository.getUserByEmail(email);
 
   if (isRegisteredUsers) throw errorFactory.conflict('User');
-
   response.locals.user = request.body;
 
   next();
@@ -23,7 +22,6 @@ const validateNotFoundUsersMiddleware = async (request: Request, response: Respo
   if (!isRegisteredUsers) throw errorFactory.notFound('User');
 
   response.locals.user = isRegisteredUsers;
-  console.log('aqui');
   next();
 };
 

@@ -26,6 +26,7 @@ async function getUsersController(request: Request, response: Response) {
 async function updateUserController(request: Request, response: Response) {
   const { idUser } = response.locals;
   const updateUserData = request.body;
+  console.log(idUser, updateUserData);
   await updateUserService(idUser, updateUserData);
 
   response.sendStatus(200);

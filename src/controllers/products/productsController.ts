@@ -1,9 +1,9 @@
 import { IProductOrder } from '@/interfaces/ordersInterfaces';
-import { categories, products } from '@prisma/client';
+import { products } from '@prisma/client';
 
-import { categoriesService, productsService } from '@/services';
+import { favoritedsServices, productsService } from '@/services';
 import { Request, Response } from 'express';
-import { ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
+import { ProductBasic, ProductsAndCategories, UpdateProductData } from '@/interfaces/productsInterfaces';
 
 export async function insertProduct(request: Request, response: Response) {
   const newProduct: IProductOrder = request.body;
@@ -25,14 +25,18 @@ export async function getProducts(request: Request, response: Response) {
   response.status(200).send(result);
 }
 
-export async function getProductsAndCategories(request: Request, response: Response) {
-  const products: ProductBasic[] = await productsService.getAllProducts();
-  const categories: categories[] = await categoriesService.getAllCategories();
+export async function getProducts_Favorites_Categories(request: Request, response: Response) {
+  const { idUser } = response.locals;
 
-  response.status(200).send({
-    products: products,
-    categories: categories,
-  });
+  const products: ProductsAndCategories = await productsService.getProducts_Favorites_Categories(idUser);
+
+  response.status(200).send(products);
+}
+
+export async function getProductsAndCategories(request: Request, response: Response) {
+  const products: ProductsAndCategories = await productsService.getProductsAndCategories();
+
+  response.status(200).send(products);
 }
 
 export async function updateProduct(req: Request, res: Response) {
@@ -48,6 +52,15 @@ export async function updateProduct(req: Request, res: Response) {
   });
 
   return res.status(200).send(updatedProduct);
+}
+
+export async function updateFavorited(req: Request, res: Response) {
+  const { idParams } = res.locals;
+  const { idUser } = res.locals;
+
+  const updatedFavorited = await favoritedsServices.updateFavorited(idParams, idUser);
+
+  return res.status(200).send(updatedFavorited);
 }
 
 export async function deleteProduct(request: Request, response: Response) {

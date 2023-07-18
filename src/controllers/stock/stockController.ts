@@ -1,4 +1,4 @@
-import { stock } from '@prisma/client';
+import { categories, stock } from '@prisma/client';
 import { stockService } from '@/services';
 import { Request, Response } from 'express';
 import { StockBasic } from '@/interfaces/stockInterfaces';
@@ -21,6 +21,12 @@ export async function getStock(request: Request, response: Response) {
   if (!name && !id) result = await stockService.getAllStock();
 
   response.status(200).send(result);
+}
+
+export async function getStockByCategories(request: Request, response: Response) {
+  const listStock: categories[] = await stockService.getStockByCategories();
+
+  response.status(200).send(listStock);
 }
 
 export async function updateStock(req: Request, res: Response) {

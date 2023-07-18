@@ -4,7 +4,7 @@ let prisma: PrismaClient;
 
 function connectDb(): void {
   prisma = new PrismaClient({
-    log: ['query', 'info', 'warn', 'error'],
+    log: ['info', 'warn', 'error'],
   });
 }
 

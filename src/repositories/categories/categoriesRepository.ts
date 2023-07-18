@@ -18,6 +18,36 @@ async function getCategoriesById(id: number): Promise<categories> {
 
   return category;
 }
+
+function getCategoriesWithStock(): Promise<categories[]> {
+  const params: Prisma.categoriesFindManyArgs = {
+    include: {
+      stock: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          image: true,
+          price: true,
+          quantity_for_unity: true,
+          unit_of_measure: true,
+          amount: true,
+          categoryId: true,
+
+          category: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+            },
+          },
+        },
+      },
+    },
+  };
+
+  return prisma.categories.findMany(params);
+}
 function getCategoriesByFilterName(name: string): Promise<categories[]> {
   const params: Prisma.categoriesFindManyArgs = {
     where: {
@@ -65,4 +95,5 @@ export {
   getCategoriesByFilterName,
   updateCategories,
   deleteCategories,
+  getCategoriesWithStock,
 };

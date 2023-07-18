@@ -87,6 +87,10 @@ model ofertsOfDay {
   userId      Int    @unique @db.Integer
   productId   Int    @db.Integer
   description String @db.VarChar(200)
+  showInit    DateTime  
+  showFinal    DateTime
+  createdAt   DateTime  @default(now())
+
 
   price_ofert Decimal
 

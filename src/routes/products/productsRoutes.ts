@@ -1,12 +1,14 @@
 import { Router } from 'express';
 
-import { validateNotFoundProductMiddleware, validateConflictProductMiddleware } from '@/middlewares/products';
+import { validateNotFoundProductMiddleware } from '@/middlewares/products';
 import { validateJwtTokenMiddleware, validateSchemaMiddleware } from '@/middlewares';
 import {
   deleteProduct,
   getProducts,
   getProductsAndCategories,
+  getProducts_Favorites_Categories,
   insertProduct,
+  updateFavorited,
   updateProduct,
 } from '@/controllers/products/productsController';
 import { validateIdParamsMiddleware } from '@/middlewares/shared';
@@ -16,11 +18,16 @@ const productsRouter = Router();
 
 productsRouter
   .get('/', getProducts)
+  .get('/products-categories', getProductsAndCategories)
   .all('/*', validateJwtTokenMiddleware)
   .post('/', validateSchemaMiddleware(productsSchemas.productsSchema), insertProduct)
-  .get('/products-categories', getProductsAndCategories)
+  .get('/products-favorites-categories', getProducts_Favorites_Categories)
   .get('/:id', validateIdParamsMiddleware, validateNotFoundProductMiddleware, getProducts)
   .patch('/:id', validateIdParamsMiddleware, validateNotFoundProductMiddleware, updateProduct)
-  .delete('/:id', validateIdParamsMiddleware, validateNotFoundProductMiddleware, deleteProduct);
+  .patch('/favoriteds/:id', validateIdParamsMiddleware, validateNotFoundProductMiddleware, updateFavorited)
+  .delete('/:id', validateIdParamsMiddleware, validateNotFoundProductMiddleware, deleteProduct)
+
+  .get('/oferts-day')
+  .get('/more-orders');
 
 export { productsRouter };

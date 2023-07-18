@@ -21,7 +21,8 @@ type LoginResponse = {
 export async function loginUserController(request: Request, response: Response) {
   const userLogin: ISign = request.body;
   const { userInDB } = response.locals;
+  const access = userInDB.typeOfUser;
 
-  const loginResponse: LoginResponse = await signInService(userLogin, userInDB);
+  const loginResponse: LoginResponse = await signInService(userLogin, userInDB, access);
   response.status(200).send(loginResponse);
 }

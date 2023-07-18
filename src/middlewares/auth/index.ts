@@ -33,7 +33,6 @@ const validateNotFoundEmailMiddleware = async (request: Request, response: Respo
   if (!isRegisteredUser) throw errorFactory.forbidden();
 
   response.locals.userInDB = isRegisteredUser;
-
   next();
 };
 

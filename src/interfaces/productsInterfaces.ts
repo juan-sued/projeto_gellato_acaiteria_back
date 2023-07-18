@@ -1,14 +1,22 @@
-import { Prisma, products } from '@prisma/client';
+import { Prisma, categories, products } from '@prisma/client';
 
 //==================== get all ==================
 
-export type ProductBasic = Pick<products, 'id' | 'name' | 'image'>;
+export type ProductBasic = Pick<products, 'id' | 'name' | 'image' | 'price'>;
 
 export interface IProductInsert {
   image: string;
   name: string;
   price: Prisma.Decimal | number;
   cupSizeId: number;
+}
+
+export interface ProductsAndCategories {
+  products: {
+    notFavoriteds: ProductBasic[];
+    favoriteds: ProductBasic[];
+  };
+  categories: categories[];
 }
 
 //================= update ====================

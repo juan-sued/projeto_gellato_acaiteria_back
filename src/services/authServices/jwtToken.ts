@@ -3,12 +3,6 @@ import dotenv from 'dotenv';
 import { errorFactory } from '@/utils';
 dotenv.config();
 
-interface Payload {
-  id: number;
-  iat: number;
-  exp: number;
-}
-
 const SECRET: jwt.Secret = process.env.SECRET_KEY || 'DAMASCO_AZUL';
 const EXPIRED_TIME = process.env.TOKEN_EXP_TIME || '24h';
 
@@ -18,10 +12,14 @@ const createToken = (userId: number) => {
 };
 
 async function decodedToken(token: string) {
-  const decoded = jwt.verify(token, SECRET) as jwt.JwtPayload;
+  try {
+    const decoded = jwt.verify(token, SECRET) as jwt.JwtPayload;
 
-  if (!decoded) throw errorFactory.unauthorized('invalid token');
+    if (!decoded) throw errorFactory.unauthorized('invalid token');
 
-  return decoded;
+    return decoded;
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) throw errorFactory.unauthorized('jtw expired');
+  }
 }
 export { createToken, decodedToken };

@@ -1,4 +1,4 @@
-import { stock, Prisma } from '@prisma/client';
+import { stock, Prisma, categories } from '@prisma/client';
 import { prisma } from '@/config';
 import { StockBasic, UpdateStockData } from '@/interfaces/stockInterfaces';
 
@@ -15,10 +15,26 @@ function getAllStock(): Promise<StockBasic[]> {
 
   return prisma.stock.findMany(params);
 }
+
+function getStockDetails(): Promise<StockBasic[]> {
+  const params: Prisma.stockFindManyArgs = {
+    select: {
+      id: true,
+      title: true,
+      image: true,
+    },
+  };
+
+  return prisma.stock.findMany(params);
+}
+
 async function getStockById(id: number): Promise<stock | null> {
   const product = await prisma.stock.findUnique({
     where: {
       id,
+    },
+    include: {
+      category: true,
     },
   });
 

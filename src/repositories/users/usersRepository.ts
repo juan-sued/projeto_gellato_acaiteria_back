@@ -9,6 +9,17 @@ function getUserByEmail(email: string) {
     where: {
       email,
     },
+    include: {
+      typeOfUser: {
+        select: {
+          id: true,
+          name: true,
+          access: true,
+          description: true,
+        },
+      },
+      addresses: true,
+    },
   };
 
   return prisma.users.findUnique(params);
@@ -19,7 +30,6 @@ async function getUserOrAdministratorById(id: number): Promise<users> {
     where: {
       id,
     },
-
     include: {
       typeOfUser: true,
       addresses: true,
@@ -28,7 +38,6 @@ async function getUserOrAdministratorById(id: number): Promise<users> {
 
   delete user['password'];
   delete user['typeOfUserId'];
-
   return user;
 }
 async function getAllUsers(): Promise<UsersBasic[]> {
@@ -106,8 +115,9 @@ async function insertUser(newUser: ISignUp) {
 //================= UPDATE ===================//
 
 async function updateUser(id: number, updateUserData: UpdateUserData) {
+  console.log(updateUserData);
   const resultUsers = await prisma.users.update({
-    where: { id: id },
+    where: { id },
     data: updateUserData,
   });
 
