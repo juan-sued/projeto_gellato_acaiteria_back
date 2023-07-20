@@ -157,10 +157,6 @@ function groupStocksByCategory(stocks: { stock: Stock }[]): StockGroupedByCatego
   return groupedStocks;
 }
 
-function getStocksByCategory(categoryName: string, groupedStocks: StockGroupedByCategory): Stock[] | undefined {
-  return groupedStocks[categoryName];
-}
-
 async function updateProduct(id: number, updateProductData: UpdateProductData) {
   if (!updateProductData) throw errorFactory.unprocessableEntity(['data inexistent']);
 

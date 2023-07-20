@@ -114,23 +114,23 @@ function getProductsByFilterName(name: string): Promise<ProductBasic[]> {
   return prisma.products.findMany(params);
 }
 
-async function getOfertDayByDate(showInitDate: Date, showFinalDate: Date): Promise<ofertsOfDay[]> {
-  const oferts = await prisma.ofertsOfDay.findMany({
-    where: {
-      showInit: {
-        lte: showInitDate,
-      },
-      showFinal: {
-        gte: showFinalDate,
-      },
-    },
-    include: {
-      product: true,
-    },
-  });
+// async function getOfertDayByDate(showInitDate: Date, showFinalDate: Date): Promise<ofertsOfDay[]> {
+//   const oferts = await prisma.ofertsOfDay.findMany({
+//     where: {
+//       showInit: {
+//         lte: showInitDate,
+//       },
+//       showFinal: {
+//         gte: showFinalDate,
+//       },
+//     },
+//     include: {
+//       product: true,
+//     },
+//   });
 
-  return oferts;
-}
+//   return oferts;
+// }
 
 //================= INSERT ===================//
 
@@ -167,5 +167,4 @@ export {
   getProductsByFilterName,
   updateProduct,
   deleteProduct,
-  getOfertDayByDate,
 };
