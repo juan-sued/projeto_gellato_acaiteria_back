@@ -15,7 +15,7 @@ export async function insertProduct(request: Request, response: Response) {
 export async function getProducts(request: Request, response: Response) {
   const { name } = request.query as Record<string, string>;
   const { idParams } = response.locals;
-  let result: ProductBasic[] | products = [];
+  let result: ProductBasic[] | products | any = [];
   if (name) result = await productsService.getProductsByName(name);
 
   if (idParams) result = await productsService.getProductById(idParams);

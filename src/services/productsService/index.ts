@@ -8,7 +8,7 @@ import {
 import { productsRepository, stockRepository, stock_products } from '@/repositories';
 import { errorFactory, productsUtils } from '@/utils';
 import { exclude } from '@/utils/functions-utils';
-import { products, categories } from '@prisma/client';
+import { products, categories, stock, Prisma } from '@prisma/client';
 import { categoriesService } from '..';
 
 async function insertProduct({
@@ -109,11 +109,56 @@ async function getProductsByName(name: string): Promise<ProductBasic[]> {
   return products;
 }
 
-async function getProductById(id: number): Promise<products> {
-  const product: products = await productsRepository.getProductById(id);
+export interface Product {
+  id: number;
+  name: string;
+  image: string;
+  price: string; // Corrigido para string
+  cupSizeId: number;
+  cupSize: Stock;
+  stock: {
+    stock: Stock;
+  }[];
+}
+interface Stock extends stock {
+  category: categories;
+}
+
+async function getProductById(id: number): Promise<any> {
+  const product: any = await productsRepository.getProductById(id);
+
+  const formatedStock = groupStocksByCategory(product.stock);
+
+  const newProduct = { ...product, stock: formatedStock };
+
   if (!product) throw errorFactory.notFound('product');
 
-  return product;
+  return newProduct;
+}
+
+interface StockGroupedByCategory {
+  [categoryName: string]: Stock[];
+}
+
+function groupStocksByCategory(stocks: { stock: Stock }[]): StockGroupedByCategory {
+  const groupedStocks: StockGroupedByCategory = {};
+
+  for (const item of stocks) {
+    const stock = item.stock;
+    const categoryName = stock.category.name;
+
+    if (!groupedStocks[categoryName]) {
+      groupedStocks[categoryName] = [];
+    }
+
+    groupedStocks[categoryName].push(stock);
+  }
+
+  return groupedStocks;
+}
+
+function getStocksByCategory(categoryName: string, groupedStocks: StockGroupedByCategory): Stock[] | undefined {
+  return groupedStocks[categoryName];
 }
 
 async function updateProduct(id: number, updateProductData: UpdateProductData) {

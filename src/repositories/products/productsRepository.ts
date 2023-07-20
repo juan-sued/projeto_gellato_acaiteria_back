@@ -1,7 +1,7 @@
-import { IProductOrder } from './../../interfaces/ordersInterfaces';
-import { Prisma, favoriteds, ofertsOfDay, products } from '@prisma/client';
+import { Prisma, ofertsOfDay, products } from '@prisma/client';
 import { prisma } from '@/config';
 import { IProductInsert, ProductBasic, UpdateProductData } from '@/interfaces/productsInterfaces';
+import { Product } from '@/services/productsService';
 
 //=================== GET =====================//
 
@@ -58,11 +58,14 @@ async function getProductById(id: number): Promise<products> {
               price: true,
               quantity_for_unity: true,
               unit_of_measure: true,
+              amount: true,
+              categoryId: true,
 
               category: {
                 select: {
                   id: true,
                   name: true,
+                  description: true,
                 },
               },
             },
