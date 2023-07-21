@@ -14,9 +14,9 @@ import { validateConflictStockMiddleware, validateNotFoundStockMiddleware } from
 const stockRouter = Router();
 
 stockRouter
-  .all('/*', validateJwtTokenMiddleware)
   .get('/', getStock)
   .get('/stock-for-categories', getStockByCategories)
+  .all('/*', validateJwtTokenMiddleware)
   .post('/', validateSchemaMiddleware(stockSchemas.stockSchema), validateConflictStockMiddleware, insertStock)
   .get('/:id', validateIdParamsMiddleware, validateNotFoundStockMiddleware, getStock)
   .patch(
